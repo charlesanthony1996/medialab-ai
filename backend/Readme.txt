@@ -25,3 +25,14 @@ HOW TO RUN THE PROJECT
 --> python3 server.py OR python server.py (based on whether you have any alias's attached, python automatically switches to python3 and not python2)
 
 
+HOW TO SETUP THE EXTENSION THROUGH GOOGLE CHROME
+
+1. open the google chrome browser
+2. click on the button with the three vertical dots on the right hand corner
+3. click extensions -> manage extensions
+4. switch on developer mode on the top right hand corner of the application (the blue toggle button)
+5. you should see the installed extensions here for your chrome application (nothing to do here. information "only" step)
+6. click load unpacked. you should see your file explorer here
+7. click frontend -> dist (select this directory and upload it) -> make sure you have run a vite build locally otherwise
+    this would not work
+8. you have uploaded the extension on developer mode now
