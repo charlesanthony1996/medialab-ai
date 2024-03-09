@@ -21,6 +21,7 @@ FRONTEND
     --> tsconfig.json
     --> tsconfig.node.json
     --> vite.config.ts
+    --> manifest.json
 
 
 BACKEND
