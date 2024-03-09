@@ -1,0 +1,11 @@
+Flask
+pytorch
+tensorflow
+keras
+numpy
+pandas
+seaborn
+matplotlib
+jsonify
+Flask-Cors
+sqlite3

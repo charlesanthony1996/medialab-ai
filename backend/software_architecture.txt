@@ -1,0 +1,63 @@
+FRONTEND
+
+-> frontend
+    --> public
+        --> icons
+    --> src
+        --> assets
+        --> components
+        --> router
+        --> App.vue
+        --> main.ts
+        --> shims-vue.d.ts
+        --> style.css
+        --> vite-env.d.ts
+    --> .env
+    --> .env.local
+    --> .gitignore
+    --> package.json
+    --> README.md
+    --> shims
+    --> tsconfig.json
+    --> tsconfig.node.json
+    --> vite.config.ts
+
+
+BACKEND
+
+--> backend
+    --> server.py
+    --> fastapi_api.py
+    --> main.js
+    --> Readme.txt
+    --> requirements.txt
+    --> software_architecture.txt
+    --> web_scraper_social.py
+
+
+NPM PACKAGES
+
+axios
+vite
+pinia
+vue-router@4
+vuetify
+typescript
+
+
+SOFTWARE ARCHITECTURE
+
+FRONTEND
+
+The frontend project runs on vue3, vuetify, vue router, pinia, axios. the build tools are
+vite, vue-tsc and @vitejs/plugin-vue. typescript and javascript can both be used in this
+project.
+
+
+
+BACKEND
+
+the backend server runs on flask. the same portnumber (5000) is used from the frontend and
+backend to exchange data. the ml backend is not instantiated yet. the web scraper is not
+ready yet as well. a simple sqlite db is written to store basic user information. the files
+are not used in the server.py, the server runs individually for now
