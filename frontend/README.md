@@ -14,7 +14,6 @@
 1. Install node js -> https://nodejs.org/en
 2. run > npm install
 3. run > npm run dev
-4. 
 
 
 ## How to setup the extension through google chrome
