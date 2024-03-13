@@ -1,6 +1,10 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import HelloWorld from '../components/HelloWorld.vue'
 import About from '../components/About.vue'
+import HateSpeech from '../components/HateSpeech.vue'
+import CounterSpeech from '../components/CounterSpeech.vue'
+import Signin from '../components/Signin.vue'
+import Signup from '../components/Signup.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -17,6 +21,27 @@ const routes: Array<RouteRecordRaw> = [
     //   return import('../components/About.vue')
     // },
     component: About
+  },
+  {
+    path: '/hatespeech',
+    name: 'hatespeech',
+    component: HateSpeech
+  },
+  {
+    path: '/counterspeech',
+    name: 'counterspeech',
+    component: CounterSpeech
+  },
+  {
+    path: '/signin',
+    name: 'signin',
+    component: Signin
+  },
+  {
+    path: '/signup',
+    name: 'signup',
+    component: Signup
+
   },
 //   { path: '/:pathMatch(.*)*', redirect: '/' },
 ]
