@@ -1,9 +1,8 @@
 <template>
-  <h1>Hate Speech Application</h1>
-
-    <v-btn to="about" variant="outlined">About</v-btn>
-    <v-btn to="" variant="outlined">Sign up</v-btn>
-    <v-btn to="" variant="outlined">Sign in</v-btn>
+  <h1 style="font-size:15px;">Hate Speech Application</h1>
+    <v-btn style="width:100px;height:30px;" to="/signup" variant="outlined">Sign up</v-btn>
+    <v-btn style="width:100px;height:30px;" to="/signin" variant="outlined">Sign in</v-btn>
+    <v-btn style="width:200px;height:30px;font-size:15px;" to="/hatespeech" variant="outlined">Continue as a guest</v-btn>
   <router-view></router-view>
 
   <p>{{ display  }}</p>
