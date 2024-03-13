@@ -1,34 +1,57 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import About from './components/About.vue'
-</script>
-
-<!-- <template> -->
-  <!-- <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a> -->
-    <!-- <v-btn to="/about" name="about">About</v-btn> -->
-    <!-- <router-link to="/about" class="button">About</router-link> -->
-    <!-- <router-view></router-view> -->
-
-  <!-- </div> -->
-  <!-- <HelloWorld msg="Vite + Vue" /> -->
-  <!-- <router-view></router-view> -->
-  <!-- <router-link to="/about" class="button">About</router-link> -->
-
-
-<!-- </template> -->
-
 <template>
-    <router-link to="/about" class="button">About</router-link>
-    <router-view></router-view>
+  <h1>Hate Speech Application</h1>
+
+    <v-btn to="about" variant="outlined">About</v-btn>
+    <v-btn to="" variant="outlined">Sign up</v-btn>
+    <v-btn to="" variant="outlined">Sign in</v-btn>
+  <router-view></router-view>
+
+  <p>{{ display  }}</p>
 </template>
 
+<script setup lang="ts">
+import About from './components/About.vue'
+import { ref, onMounted, onUnmounted } from 'vue'
+
+const display = ref('')
+
+// function to select text
+function getSelectedText() {
+  if(window.getSelection) {
+    return window.getSelection().toString()
+  } else if (document.selection && document.selection.type != "Control") {
+    return document.selection.createRange().text
+  }
+  return ''
+}
+
+// update function for the selected text
+function updateDisplayWithSelectedText() {
+  const text = getSelectedText()
+  display.value = text
+}
+
+onMounted(() => {
+  // listen for mouse events
+  document.addEventListener('mouseup', updateDisplayWithSelectedText)
+
+  document.addEventListener('keyup', updateDisplayWithSelectedText)
+
+})
+
+
+onUnmounted(() => {
+  document.addEventListener('mouseup', updateDisplayWithSelectedText)
+
+  document.addEventListener('keyup', updateDisplayWithSelectedText)
+})
+
+</script>
+
+
+
 <style scoped>
+
 .logo {
   height: 6em;
   padding: 1.5em;
