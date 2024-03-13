@@ -8,6 +8,6 @@ export default defineConfig({
   },
   plugins: [vue()],
   build: {
-    outDir: 'public', // Ensure this points to your extension's directory
+    outDir: 'public', 
   },
 });
