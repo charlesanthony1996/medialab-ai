@@ -1,8 +1,9 @@
 import os
 from googleapiclient.discovery import build
 import googleapiclient.errors
+from api_keys_file import youtube_api_key
 
-youtube_api_key = "AIzaSyBpcyTyN0zpVQ5urZv9m6f9eZDVlNIgc2g"
+
 def main():
 
     api_service_name = "youtube"
