@@ -60,7 +60,7 @@ def database_local():
 
         # print all users
         print("users in the db")
-        get_all_users(conn)
+        # get_all_users(conn)
 
         conn.close()
 
