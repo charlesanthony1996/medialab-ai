@@ -11,6 +11,11 @@ def get_data():
     data = {"message": "This is the data from Flask."}
     return jsonify(data)
 
+@app.route('/api/comments', methods=['GET'])
+def get_comments():
+    data = {"comment": "first comment"}
+    return jsonify(data)
+
 @app.route("/extension/default", methods=["GET"])
 def get_default_extension():
     data = { "prompt": "Highlighted"}
