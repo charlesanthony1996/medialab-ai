@@ -13,7 +13,7 @@ import axios from 'axios'
 import { getCurrentTab, url_name } from '../services/services'
 
 
-const comment_des = ref('')
+var comment_des = ref('')
 
 function testFunction() {
     console.log("test function")
