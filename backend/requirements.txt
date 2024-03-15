@@ -8,4 +8,4 @@ seaborn
 matplotlib
 jsonify
 Flask-Cors
-sqlite3
+Sqlite3
