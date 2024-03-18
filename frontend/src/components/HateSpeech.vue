@@ -3,6 +3,13 @@
     <p>Your url: {{ url_name }}</p>
     <v-btn to="" variant="outlined" @click="getComments">Get Comment</v-btn>
     <p style="">display comments: {{ comment_des }}</p>
+
+    <li>
+        <v-row><p>Hello how do you do sir?</p></v-row>
+        <v-row><p>you suck go fly a kite</p></v-row>
+        <v-row><p>Hello how do you do sir?</p></v-row>
+        <v-row><p>Fuck you, you a piece of shit. my grandmother can swear better than you!</p></v-row>
+    </li>
 </template>
 
 
@@ -13,7 +20,8 @@ import axios from 'axios'
 import { getCurrentTab, url_name } from '../services/services'
 
 
-var comment_des = ref('')
+const comment_des = ref('')
+const counterSpeechPrompt = ref('')
 
 function testFunction() {
     console.log("test function")
@@ -22,7 +30,7 @@ function testFunction() {
 const getComments = async () => {
     try{
         const response = await axios.get("http://localhost:8000/api/comments")
-        comment_des = response.data.comment
+        comment_des.value = response.data.comment
         console.log(comment_des)
     }
     catch(error) {
@@ -42,6 +50,19 @@ const isYoutube = computed(() => {
         console.log("couldnt connect to server")
     }
 })
+
+
+async function sendCommentsToServer() {
+    const comments = Array.from(document.querySelectorAll('v-row p')).map(p => p.innerText)
+    console.log(comments)
+    try {
+        await axios.post('http://localhost:8000/api/process_comments', { comments })
+        console.log("Comments sent succesfully")
+    } catch(error) {
+        console.error("Error sending comments to server: ", error)
+    }
+}
+
 
 
 
