@@ -6,11 +6,13 @@
   <router-view></router-view>
 
   <p>{{ display  }}</p>
+  <p>{{  }}</p>
 </template>
 
 <script setup lang="ts">
-import About from './components/About.vue'
+// import About from './components/About.vue'
 import { ref, onMounted, onUnmounted } from 'vue'
+import axios from 'axios'
 
 const display = ref('')
 
@@ -28,6 +30,16 @@ function getSelectedText() {
 function updateDisplayWithSelectedText() {
   const text = getSelectedText()
   display.value = text
+
+  if(text.trim().length > 0) {
+    axios.post('http://localhost:8000/api/analyze_text', { text: text.trim() })
+    .then((response: { data: any }) => {
+      console.log("analysis result: ", response.data)
+    })
+    .catch((error: any) => {
+      console.error("Error sending text for analysis: ", error)
+    })
+  }
 }
 
 onMounted(() => {
