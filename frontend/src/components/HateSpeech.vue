@@ -5,7 +5,7 @@
     <p style="">display comments: {{ comment_des }}</p>
 
     <li>
-        <v-row><p>Hello how do you do sir?</p></v-row>
+        <v-row><p>Hello whats your daily routine like?</p></v-row>
         <v-row><p>you suck go fly a kite</p></v-row>
         <v-row><p>Hello how do you do sir?</p></v-row>
         <v-row><p>Fuck you, you a piece of shit. my grandmother can swear better than you!</p></v-row>
