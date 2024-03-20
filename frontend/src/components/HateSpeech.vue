@@ -1,8 +1,8 @@
 <template>
-    <p>Trying to detect hate speech</p>
-    <p>Your url: {{ url_name }}</p>
+    <p style="padding-bottom: 24px; padding-top: 24px;">Trying to detect hate speech</p>
+    <p style="padding-bottom: 24px;">Your url: {{ url_name }}</p>
     <v-btn to="" variant="outlined" @click="getComments">Get Comment</v-btn>
-    <p style="">display comments: {{ comment_des }}</p>
+    <p style="padding-bottom: 24px; padding-top: 24px;">display comments: {{ comment_des }}</p>
 
     <li>
         <v-row><p>Hello how do you do sir?</p></v-row>

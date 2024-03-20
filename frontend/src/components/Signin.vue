@@ -1,12 +1,13 @@
 <template>
-    <p>Sign in here</p>
-    <v-text>Username or email</v-text>
-    <v-text-field label="username or email"></v-text-field>
-    <v-text>Password</v-text>
-    <v-text-field label="password"></v-text-field>
-
-
+    <div class="input-area">
+        <p style="padding-bottom: 24px; padding-top: 24px;"></p>
+    
+        <v-text-field label="Username or E-Mail" class="input-field"></v-text-field>
+        
+        <v-text-field label="Password" type="password" class="input-field"></v-text-field>
+    </div>
 </template>
+
 
 
 <script setup>
@@ -16,5 +17,9 @@ import { ref } from 'vue'
 </script>
 
 <style scoped>
+    .input-area {
+        width: 350px;
+    }
+
 
 </style>
