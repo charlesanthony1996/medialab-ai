@@ -4,18 +4,20 @@
     <v-btn to="" variant="outlined" @click="getComments">Get Comment</v-btn>
     <p style="">display comments: {{ comment_des }}</p>
 
-    <li>
+    <!-- <li>
         <v-row><p>Hello whats your daily routine like?</p></v-row>
         <v-row><p>you suck go fly a kite</p></v-row>
         <v-row><p>Hello how do you do sir?</p></v-row>
         <v-row><p>Fuck you, you a piece of shit. my grandmother can swear better than you!</p></v-row>
-    </li>
+    </li> -->
 
     <p>Display comments</p>
     <ul>
         <li v-for="(comment, index) in comment_des" :key="index">{{ comment }}</li>
-
     </ul>
+
+    <!-- receiving the message from background.js here -->
+    <div>{{ receivedMessage }}</div>
 </template>
 
 
@@ -24,15 +26,14 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import axios from 'axios'
 import { getCurrentTab, url_name } from '../services/services'
-// import '../../public/contentScript.js'
-// import { observedComments } from '../../public/contentScript.js'
 import { createWatchCompilerHost } from 'typescript'
-import { refTag } from '../../public/background' 
+// import { refTag } from '../../public/background'
 
 
 const comment_des = ref([])
 const counterSpeechPrompt = ref('')
-console.log(refTag.value)
+// console.log(refTag.value)
+const receivedMessage = ref('')
 
 function testFunction() {
     console.log("test function")
@@ -74,27 +75,6 @@ async function sendCommentsToServer() {
     }
 }
 
-// console.log(comments)
-// onMounted(() => {
-//     chrome.runtime.onMessage.addListener(handleMessage)
-// })
-
-// onUnmounted(() => {
-//     chrome.runtime.onMessage.removeListener(handleMessage)
-// })
-
-onMounted(() => {
-    if (window.chrome && chrome.runtime && chrome.runtime.onMessage) {
-        chrome.runtime.onMessage.addListener(handleMessage)
-    }
-})
-
-onUnmounted(() => {
-    if (window.chrome && chrome.runtime && chrome.runtime.onMessage) {
-        chrome.runtime.onMessage.removeListener(handleMessage)
-    }
-})
-
 
 function handleMessage(message, sender, sendResponse) {
     if(message.action === "updateComments") {
@@ -103,13 +83,28 @@ function handleMessage(message, sender, sendResponse) {
 
 }
 
-// chrome.runtime.onMessage.addListener(
-//   function(request, sender, sendResponse) {
-//     console.log(request);
-//     sendResponse({farewell: "goodbye"});
-//   }
-// );
 
+onMounted(() => {
+    chrome.runtime.onMessage.addListener((request, sender, sendReponse) => {
+        if(request.action === "useTabsAPI") {
+            receivedMessage.value = request.data.message
+        }
+    })
+})
+
+function messageListener(request, sender, sendResponse) {
+    if(request.action === "useTabsAPI") {
+        receivedMessage.value = request.data.message
+    }
+}
+
+onMounted(() => {
+    chrome.runtime.onMessage.addListener(messageListener)
+})
+
+onUnmounted(() => {
+    chrome.runtime.onMessage.removeListener(messageListener)
+})
 
 </script>
 
