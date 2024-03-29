@@ -10,18 +10,29 @@
         <v-row><p>Hello how do you do sir?</p></v-row>
         <v-row><p>Fuck you, you a piece of shit. my grandmother can swear better than you!</p></v-row>
     </li>
+
+    <p>Display comments</p>
+    <ul>
+        <li v-for="(comment, index) in comment_des" :key="index">{{ comment }}</li>
+
+    </ul>
 </template>
 
 
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import axios from 'axios'
 import { getCurrentTab, url_name } from '../services/services'
+// import '../../public/contentScript.js'
+// import { observedComments } from '../../public/contentScript.js'
+import { createWatchCompilerHost } from 'typescript'
+import { refTag } from '../../public/background' 
 
 
-const comment_des = ref('')
+const comment_des = ref([])
 const counterSpeechPrompt = ref('')
+console.log(refTag.value)
 
 function testFunction() {
     console.log("test function")
@@ -63,7 +74,41 @@ async function sendCommentsToServer() {
     }
 }
 
+// console.log(comments)
+// onMounted(() => {
+//     chrome.runtime.onMessage.addListener(handleMessage)
+// })
 
+// onUnmounted(() => {
+//     chrome.runtime.onMessage.removeListener(handleMessage)
+// })
+
+onMounted(() => {
+    if (window.chrome && chrome.runtime && chrome.runtime.onMessage) {
+        chrome.runtime.onMessage.addListener(handleMessage)
+    }
+})
+
+onUnmounted(() => {
+    if (window.chrome && chrome.runtime && chrome.runtime.onMessage) {
+        chrome.runtime.onMessage.removeListener(handleMessage)
+    }
+})
+
+
+function handleMessage(message, sender, sendResponse) {
+    if(message.action === "updateComments") {
+        comment_des.value = message.comments
+    }
+
+}
+
+// chrome.runtime.onMessage.addListener(
+//   function(request, sender, sendResponse) {
+//     console.log(request);
+//     sendResponse({farewell: "goodbye"});
+//   }
+// );
 
 
 </script>
