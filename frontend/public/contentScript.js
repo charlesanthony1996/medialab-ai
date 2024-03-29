@@ -37,11 +37,10 @@ const observerCallback = (entries) => {
 // });
 
 // In contentScript.js
-chrome.runtime.sendMessage({action: "useTabsAPI", data: { message: "hello" }});
 
 chrome.runtime.sendMessage({action: "useTabsAPI", data: { message: "hello" }}, function(response) {
-    console.log(response.response); // Logs "Received your message!"
-  });
+    console.log(response.response)
+})
   
 
 const observerOptions = {
