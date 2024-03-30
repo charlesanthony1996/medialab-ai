@@ -2,6 +2,7 @@
     <p>Trying to detect hate speech</p>
     <p>Your url: {{ url_name }}</p>
     <p>Tab url: {{  tabUrl }}</p>
+    <p>Tab url from services: {{ getCurrentTab() }}</p>
     <p>Loaded: {{ tabLoaded }}</p>
     <v-btn to="" variant="outlined" @click="getComments">Get Comment</v-btn>
     <p style="">display comments: {{ comment_des }}</p>
