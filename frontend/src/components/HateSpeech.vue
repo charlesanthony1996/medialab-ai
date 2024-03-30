@@ -1,8 +1,8 @@
 <template>
     <p>Trying to detect hate speech</p>
-    <p>Your url: {{ url_name }}</p>
+    <p>Your url: {{ url_name1 }}</p>
     <p>Tab url: {{  tabUrl }}</p>
-    <p>Tab url from services: {{ getCurrentTab() }}</p>
+    <p>Tab url from services: {{ url_name }}</p>
     <p>Loaded: {{ tabLoaded }}</p>
     <v-btn to="" variant="outlined" @click="getComments">Get Comment</v-btn>
     <p style="">display comments: {{ comment_des }}</p>
@@ -39,6 +39,8 @@ const counterSpeechPrompt = ref('')
 const receivedMessage = ref('')
 const tabLoaded = ref('')
 const tabUrl = ref('')
+// const url_name = ref('')
+const url_name1 = ref('')
 
 function testFunction() {
     console.log("test function")
@@ -55,18 +57,16 @@ const getComments = async () => {
     }
 }
 
-const isYoutube = computed(() => {
-    if(url_name === "https://www.youtube.com") {
-        // write function to start web scraper. trigger function
-        getComments().then(() => {
-            console.log("done")
-        })
-
-        
-    } else {
-        console.log("couldnt connect to server")
-    }
-})
+// const isYoutube = computed(() => {
+//     if(url_name === "https://www.youtube.com") {
+//         // write function to start web scraper. trigger function
+//         getComments().then(() => {
+//             console.log("done")
+//         })
+//     } else {
+//         console.log("couldnt connect to server")
+//     }
+// })
 
 
 async function getCurrentTabAsync() {
@@ -84,13 +84,12 @@ async function getCurrentTabAsync() {
 }
 
 
-chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
-        if (tabs.length > 0) {
-            url_name.value = tabs[0].url
-            return url_name
-    
-        }
-})
+// chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
+//         if (tabs.length > 0) {
+//             url_name1.value = tabs[0].url
+//             return url_name1    
+//         }
+// })
 
 
 
@@ -131,27 +130,38 @@ function handleMessage(message, sender, sendResponse) {
 
 onMounted(async () => {
 
-    tabUrl.value = await getCurrentTabAsync()
-    await getCurrentTabAsync()
+    // trying to see whether you see loaded or not for example.com
+    // tabUrl.value = await getCurrentTabAsync()
+    // await getCurrentTabAsync()
 
-    const checkTabURL = (tabId, changeInfo, tab) => {
-        if (changeInfo.status === 'complete' && tab.url.includes("http://www.example.com")) {
-            console.log("Tab updated and loaded: " + tab.url);
-            tabLoaded.value = "loaded"; // This updates the reactive property directly
-        } else {
-            tabLoaded.value = "not loaded";
-        }
-    };
+    // const checkTabURL = (tabId, changeInfo, tab) => {
+    //     if (changeInfo.status === 'complete' && tab.url.includes("http://www.example.com")) {
+    //         console.log("Tab updated and loaded: " + tab.url);
+    //         tabLoaded.value = "loaded"; // This updates the reactive property directly
+    //     } else {
+    //         tabLoaded.value = "not loaded";
+    //     }
+    // };
 
-    chrome.tabs.onUpdated.addListener(checkTabURL);
+    // chrome.tabs.onUpdated.addListener(checkTabURL);
 
-    chrome.runtime.onMessage.addListener((request, sender, sendReponse) => {
-        if(request.action === "useTabsAPI") {
-            receivedMessage.value = request.data.message
-            return receivedMessage
+    // // getting "hello" here
+    // chrome.runtime.onMessage.addListener((request, sender, sendReponse) => {
+    //     if(request.action === "useTabsAPI") {
+    //         receivedMessage.value = request.data.message
+    //         return receivedMessage
 
-        }
-    })
+    //     }
+    // })
+
+
+    // url_name
+    try {
+        await getCurrentTab()
+        console.log(url_name.value)
+    } catch(error) {
+        console.log(error)
+    }
 })
 
 function messageListener(request, sender, sendResponse) {
@@ -161,13 +171,13 @@ function messageListener(request, sender, sendResponse) {
 }
 
 onMounted(() => {
-    chrome.runtime.onMessage.addListener(messageListener)
+    // chrome.runtime.onMessage.addListener(messageListener)
 })
 
 onUnmounted(() => {
-    chrome.runtime.onMessage.removeListener(messageListener)
+    // chrome.runtime.onMessage.removeListener(messageListener)
 
-    chrome.tabs.onUpdated.removeListener(checkTabURL);
+    // chrome.tabs.onUpdated.removeListener(checkTabURL);
 })
 
 </script>
