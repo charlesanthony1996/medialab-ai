@@ -1,6 +1,8 @@
 <template>
     <p>Trying to detect hate speech</p>
     <p>Your url: {{ url_name }}</p>
+    <p>Tab url: {{  tabUrl }}</p>
+    <p>Loaded: {{ tabLoaded }}</p>
     <v-btn to="" variant="outlined" @click="getComments">Get Comment</v-btn>
     <p style="">display comments: {{ comment_des }}</p>
 
@@ -34,6 +36,8 @@ const comment_des = ref([])
 const counterSpeechPrompt = ref('')
 // console.log(refTag.value)
 const receivedMessage = ref('')
+const tabLoaded = ref('')
+const tabUrl = ref('')
 
 function testFunction() {
     console.log("test function")
@@ -64,6 +68,46 @@ const isYoutube = computed(() => {
 })
 
 
+async function getCurrentTabAsync() {
+    return new Promise((resolve, reject) => {
+        chrome.tabs.query({ active: true, currentWindow: true}, (tabs) => {
+            if (chrome.runtime.lastError) {
+                reject(new Error(chrome.runtime.lastError))
+                // tabLoaded.value = "loaded"
+            } else {
+                resolve(tabs.length > 0 ? tabs[0].url : '')
+                // tabLoaded.value = "not loaded"
+            }
+        })
+    })
+}
+
+
+chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
+        if (tabs.length > 0) {
+            url_name.value = tabs[0].url
+            return url_name
+    
+        }
+})
+
+
+
+async function getExampleTabAsync() {
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+    if (changeInfo.status === 'complete' && tab.url.includes("http://www.example.com")) {
+      console.log("Tab updated and loaded: " + tab.url)
+      tabLoaded.value = "loaded"
+      return tabLoaded
+    }
+    else {
+        tabLoaded.value = "not loaded"
+        return tabLoaded
+    }
+})
+}
+
+
 async function sendCommentsToServer() {
     const comments = Array.from(document.querySelectorAll('v-row p')).map(p => p.innerText)
     console.log(comments)
@@ -84,10 +128,27 @@ function handleMessage(message, sender, sendResponse) {
 }
 
 
-onMounted(() => {
+onMounted(async () => {
+
+    tabUrl.value = await getCurrentTabAsync()
+    await getCurrentTabAsync()
+
+    const checkTabURL = (tabId, changeInfo, tab) => {
+        if (changeInfo.status === 'complete' && tab.url.includes("http://www.example.com")) {
+            console.log("Tab updated and loaded: " + tab.url);
+            tabLoaded.value = "loaded"; // This updates the reactive property directly
+        } else {
+            tabLoaded.value = "not loaded";
+        }
+    };
+
+    chrome.tabs.onUpdated.addListener(checkTabURL);
+
     chrome.runtime.onMessage.addListener((request, sender, sendReponse) => {
         if(request.action === "useTabsAPI") {
             receivedMessage.value = request.data.message
+            return receivedMessage
+
         }
     })
 })
@@ -104,6 +165,8 @@ onMounted(() => {
 
 onUnmounted(() => {
     chrome.runtime.onMessage.removeListener(messageListener)
+
+    chrome.tabs.onUpdated.removeListener(checkTabURL);
 })
 
 </script>
