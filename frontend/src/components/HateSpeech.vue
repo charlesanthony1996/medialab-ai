@@ -4,8 +4,9 @@
     <p>Tab url: {{  tabUrl }}</p>
     <p>Tab url from services: {{ url_name }}</p>
     <p>Loaded: {{ tabLoaded }}</p>
-    <v-btn to="" variant="outlined" @click="getComments">Get Comment</v-btn>
-    <p style="">display comments: {{ comment_des }}</p>
+    <!-- <v-btn to="" variant="outlined" @click="getComments">Get Comment</v-btn> -->
+    <p style="">display comments:</p>
+    <div> {{  comment_des }}</div>
 
     <!-- <li>
         <v-row><p>Hello whats your daily routine like?</p></v-row>
@@ -28,7 +29,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import axios from 'axios'
-import { getCurrentTab, url_name } from '../services/services'
+import { getCurrentTab, url_name, getExampleTabAsync, tabLoaded } from '../services/services'
 import { createWatchCompilerHost } from 'typescript'
 // import { refTag } from '../../public/background'
 
@@ -37,7 +38,7 @@ const comment_des = ref([])
 const counterSpeechPrompt = ref('')
 // console.log(refTag.value)
 const receivedMessage = ref('')
-const tabLoaded = ref('')
+// const tabLoaded = ref('')
 const tabUrl = ref('')
 // const url_name = ref('')
 const url_name1 = ref('')
@@ -69,7 +70,7 @@ const getComments = async () => {
 // })
 
 
-async function getCurrentTabAsync() {
+async function getCurrentTabAsyncFromComponent() {
     return new Promise((resolve, reject) => {
         chrome.tabs.query({ active: true, currentWindow: true}, (tabs) => {
             if (chrome.runtime.lastError) {
@@ -93,19 +94,19 @@ async function getCurrentTabAsync() {
 
 
 
-async function getExampleTabAsync() {
-chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-    if (changeInfo.status === 'complete' && tab.url.includes("http://www.example.com")) {
-      console.log("Tab updated and loaded: " + tab.url)
-      tabLoaded.value = "loaded"
-      return tabLoaded
-    }
-    else {
-        tabLoaded.value = "not loaded"
-        return tabLoaded
-    }
-})
-}
+// async function getExampleTabAsync() {
+// chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+//     if (changeInfo.status === 'complete' && tab.url.includes("http://www.example.com")) {
+//       console.log("Tab updated and loaded: " + tab.url)
+//       tabLoaded.value = "loaded"
+//       return tabLoaded
+//     }
+//     else {
+//         tabLoaded.value = "not loaded"
+//         return tabLoaded
+//     }
+// })
+// }
 
 
 async function sendCommentsToServer() {
@@ -131,19 +132,19 @@ function handleMessage(message, sender, sendResponse) {
 onMounted(async () => {
 
     // trying to see whether you see loaded or not for example.com
-    // tabUrl.value = await getCurrentTabAsync()
-    // await getCurrentTabAsync()
+    tabUrl.value = await getCurrentTabAsyncFromComponent()
+    await getCurrentTabAsyncFromComponent()
 
-    // const checkTabURL = (tabId, changeInfo, tab) => {
-    //     if (changeInfo.status === 'complete' && tab.url.includes("http://www.example.com")) {
-    //         console.log("Tab updated and loaded: " + tab.url);
-    //         tabLoaded.value = "loaded"; // This updates the reactive property directly
-    //     } else {
-    //         tabLoaded.value = "not loaded";
-    //     }
-    // };
+    const checkTabURL = (tabId, changeInfo, tab) => {
+        if (changeInfo.status === 'complete' && tab.url.includes("http://www.example.com")) {
+            console.log("Tab updated and loaded: " + tab.url);
+            tabLoaded.value = "loaded"; // This updates the reactive property directly
+        } else {
+            tabLoaded.value = "not loaded";
+        }
+    };
 
-    // chrome.tabs.onUpdated.addListener(checkTabURL);
+    chrome.tabs.onUpdated.addListener(checkTabURL);
 
     // // getting "hello" here
     // chrome.runtime.onMessage.addListener((request, sender, sendReponse) => {
@@ -153,6 +154,13 @@ onMounted(async () => {
 
     //     }
     // })
+
+    try {
+        const status = await getExampleTabAsync();
+        console.log("Tab load status:", status);
+    } catch (error) {
+        console.error("Failed to load the tab:", error);
+    }
 
 
     // url_name
@@ -172,10 +180,12 @@ function messageListener(request, sender, sendResponse) {
 
 onMounted(() => {
     // chrome.runtime.onMessage.addListener(messageListener)
+    chrome.runtime.onMessage.addListener(handleMessage)
 })
 
 onUnmounted(() => {
     // chrome.runtime.onMessage.removeListener(messageListener)
+    chrome.runtime.onMessage.removeListener(handleMessage)
 
     // chrome.tabs.onUpdated.removeListener(checkTabURL);
 })
