@@ -1,14 +1,29 @@
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 
 export const url_name = ref('')
 
 export function getCurrentTab() {
-    chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
-        if (tabs.length > 0) {
-            url_name.value = tabs[0].url
-            return url_name
-    
-        }
+    return new Promise((resolve, reject) => {
+        chrome.tabs.query({ active: true, lastFocusedWindow: true}, (tabs) => {
+            if(tabs.length > 0) {
+                url_name.value = tabs[0].value
+                resolve(url_name.value)
+            } else {
+                reject(new Error("no active tab found"))
+            }
+        })
     })
 }
+
+onMounted(() => {
+    async function getCurrentTab() {
+        chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
+            if (tabs.length > 0) {
+                url_name.value = tabs[0].url
+                return url_name
+            }
+        })
+    }
+})
+
 
