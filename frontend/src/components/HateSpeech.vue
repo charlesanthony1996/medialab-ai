@@ -5,8 +5,8 @@
     <p>Tab url from services: {{ url_name }}</p>
     <p>Loaded: {{ tabLoaded }}</p>
     <!-- <v-btn to="" variant="outlined" @click="getComments">Get Comment</v-btn> -->
-    <p style="">display comments:</p>
-    <div> {{  comment_des }}</div>
+    <!-- <p style="">display comments:</p> -->
+    <!-- <div> {{  comment_des }}</div> -->
 
     <!-- <li>
         <v-row><p>Hello whats your daily routine like?</p></v-row>
@@ -15,7 +15,7 @@
         <v-row><p>Fuck you, you a piece of shit. my grandmother can swear better than you!</p></v-row>
     </li> -->
 
-    <p>Display comments</p>
+    <p>Displaying the latest 5 comments</p>
     <ul>
         <li v-for="(comment, index) in comment_des" :key="index">{{ comment }}</li>
     </ul>
