@@ -20,8 +20,7 @@ const observerCallback = (entries) => {
         console.log(`Comment ${index + 1}: ${comment.innerText}`)
     })
 
-    // chrome.runtime.sendMessage({ action: "updateComments", comments: latestComments.map(comment => comment.innerText )})
-    
+    chrome.runtime.sendMessage({ action: "updateComments", comments: latestComments.map(comment => comment.innerText )})
 }
 
 // chrome.runtime.sendMessage({ action: "updateComments", comments: latestComments.map(comment => comment.innerText )})
@@ -37,7 +36,6 @@ const observerCallback = (entries) => {
 // });
 
 // In contentScript.js
-chrome.runtime.sendMessage({action: "useTabsAPI", data: { message: "hello" }})
 
 chrome.runtime.sendMessage({action: "useTabsAPI", data: { message: "hello" }}, function(response) {
     console.log(response.response)
