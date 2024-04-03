@@ -1,22 +1,22 @@
 <template>
   <h1 style="font-size:15px;">Hate Speech Application</h1>
-    <v-btn style="width:100px;height:30px;" to="/signup" variant="outlined">Sign up</v-btn>
-    <v-btn style="width:100px;height:30px;" to="/signin" variant="outlined">Sign in</v-btn>
-    <v-btn style="width:200px;height:30px;font-size:15px;" to="/hatespeech" variant="outlined">Continue as a guest</v-btn>
+  <v-btn style="width:100px;height:30px;" to="/signup" variant="outlined">Sign up</v-btn>
+  <v-btn style="width:100px;height:30px;" to="/signin" variant="outlined">Sign in</v-btn>
+  <v-btn style="width:200px;height:30px;font-size:15px;" to="/hatespeech" variant="outlined">Continue as a guest</v-btn>
   <router-view></router-view>
 
-  <p>{{ display  }}</p>
-  <p>{{  }}</p>
+  <p>{{ display }}</p>
+  <p v-if="analysisResult">{{ analysisResult }}</p>
 </template>
 
 <script setup lang="ts">
-// import About from './components/About.vue'
 import { ref, onMounted, onUnmounted } from 'vue'
 import axios from 'axios'
 
 const display = ref('')
+const analysisResult = ref('')
 
-// function to select text
+// Function to select text
 function getSelectedText() {
   if(window.getSelection) {
     return window.getSelection().toString()
@@ -26,43 +26,36 @@ function getSelectedText() {
   return ''
 }
 
-// update function for the selected text
+// Update function for the selected text
 function updateDisplayWithSelectedText() {
   const text = getSelectedText()
   display.value = text
 
   if(text.trim().length > 0) {
     axios.post('http://localhost:8000/api/analyze_text', { text: text.trim() })
-    .then((response: { data: any }) => {
+    .then((response) => {
       console.log("analysis result: ", response.data)
+      analysisResult.value = response.data.counterSpeech || response.data.message || ''
     })
-    .catch((error: any) => {
+    .catch((error) => {
       console.error("Error sending text for analysis: ", error)
     })
   }
 }
 
 onMounted(() => {
-  // listen for mouse events
+  // Listen for mouse events
   document.addEventListener('mouseup', updateDisplayWithSelectedText)
-
   document.addEventListener('keyup', updateDisplayWithSelectedText)
-
 })
-
 
 onUnmounted(() => {
-  document.addEventListener('mouseup', updateDisplayWithSelectedText)
-
-  document.addEventListener('keyup', updateDisplayWithSelectedText)
+  document.removeEventListener('mouseup', updateDisplayWithSelectedText)
+  document.removeEventListener('keyup', updateDisplayWithSelectedText)
 })
-
 </script>
 
-
-
 <style scoped>
-
 .logo {
   height: 6em;
   padding: 1.5em;
