@@ -10,7 +10,8 @@ app = Flask(__name__)
 
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-
+# this is just a dummy route
+# to get a dummy message from the backend
 @app.route('/api/data', methods=['GET'])
 def get_data():
     data = {"message": "This is the data from Flask."}
