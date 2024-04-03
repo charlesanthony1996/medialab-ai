@@ -20,23 +20,9 @@ const observerCallback = (entries) => {
         console.log(`Comment ${index + 1}: ${comment.innerText}`)
     })
 
-    // chrome.runtime.sendMessage({ action: "updateComments", comments: latestComments.map(comment => comment.innerText )})
+    chrome.runtime.sendMessage({ action: "updateComments", comments: latestComments.map(comment => comment.innerText )})
     
 }
-
-// chrome.runtime.sendMessage({ action: "updateComments", comments: latestComments.map(comment => comment.innerText )})
-
-// chrome.runtime.sendMessage({greeting: "hello"})
-
-// chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-//     if (changeInfo.status === 'complete') {
-//         chrome.tabs.sendMessage(tabId, {greeting: "hello"}, function(response) {
-//             console.log(response.farewell);
-//         });
-//     }
-// });
-
-// In contentScript.js
 
 chrome.runtime.sendMessage({action: "useTabsAPI", data: { message: "hello" }}, function(response) {
     console.log(response.response)
@@ -62,34 +48,54 @@ window.addEventListener('scroll', () => {
     .forEach(comment => observer.observe(comment))
 })
 
-// setInterval(() => {
-//     const comments = document.querySelectorAll('.yt-core-attributed-string.yt-core-attributed-string--white-space-pre-wrap');
+const observedCommentsForCopy = new Set();
 
-//     // for (let i = 0; i < comments.length && i < 5; i++) {
-//     //     console.log(`Comment ${i + 1}: ${comments[i].innerText}`);
-//     // }
+const observerCallbackForCopy = (entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            observedCommentsForCopy.add(entry.target);
+            // Send each comment to the server
+            sendCommentToServer(entry.target.innerText);
+        } else {
+            observedCommentsForCopy.delete(entry.target);
+        }
+    });
+};
 
-//     for (let i = 0; i < comments.length; i++) {
+const sendCommentToServer = (commentText) => {
+    fetch('http://localhost:8000/api/process_comments', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ comments: [commentText] })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Comment sent successfully:', data);
+    })
+    .catch(error => {
+        console.error('Error sending comment to server:', error);
+    });
+};
 
-//         const commentTextElement = comments[i].querySelector('#content')
-//         if (commentTextElement) {
-//             console.log(`Comment ${i + 1}: ${commentTextElement}`)
-//         }
-//     }
-// }, 4000)
+const observerOptionsForCopy = {
+    root: null,
+    rootMargin: '10px',
+    threshold: 0.5
+};
 
-// things to do
-// get the comments displyed on the extension view
-// make the ui persistent?
-// how to export the comments to hatespeech.vue?
-// looks like the dom tree had to be adjusted again? check it
-// not saving or storing comments. fixed issue with arthur
-// how do we use the youtube api? do we need it?
+const observerForCopy = new IntersectionObserver(observerCallbackForCopy, observerOptionsForCopy);
 
+document.querySelectorAll('.yt-core-attributed-string.yt-core-attributed-string--white-space-pre-wrap')
+    .forEach(comment => observerForCopy.observe(comment));
 
-// element.addEventListener('touchstart', event => {
-
-// }, { passive: true })
-
-// does not work
-// export { observedComments }
+window.addEventListener('scroll', () => {
+    document.querySelectorAll('.yt-core-attributed-string.yt-core-attributed-string--white-space-pre-wrap')
+    .forEach(comment => observerForCopy.observe(comment));
+});

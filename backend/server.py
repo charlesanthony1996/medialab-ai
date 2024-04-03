@@ -44,14 +44,12 @@ def analyze_text():
         text = data.get('text', '')
 
         if not text:
-            return jsonify({"error", "No text provided"}), 400
-            # print("broke here")
+            return jsonify({"error": "No text provided"}), 400
 
         system_message = "You are an AI trained to detect hate speech and respond with counter-speech if necessary. If no hate speech is detected, respond with 'No hate speech detected.'"
         user_message = text
 
         response = openai.ChatCompletion.create(
-            # model="text-davinci-003",
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": system_message },
@@ -59,15 +57,12 @@ def analyze_text():
             ]
         )
 
-        # extracting and sending back the AI's response
         analysis_result = response['choices'][0]['message']['content'].strip()
         print("Analysis result:", analysis_result)
 
-        # Decide what to return based on the analysis result
         if "No hate speech detected." in analysis_result:
             return jsonify({"message": "No hate speech detected."})
         else:
-            # Return the counter-speech response
             return jsonify({"counterSpeech": analysis_result})
 
     except Exception as e:
