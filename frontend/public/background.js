@@ -35,17 +35,16 @@ chrome.contextMenus.create({
   contexts: ['selection']
 })
 
-let kaka
+let manuallyHighlighted
 
 // Add click event listener to the context menu item
 chrome.contextMenus.onClicked.addListener(function(info, tab) {
   if (info.menuItemId === "myContextMenu") {
       // Display the selected text in an alert
-      kaka = info.selectionText
-      alert(info.selectionText);
+      manuallyHighlighted = info.selectionText
   }
 });
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  sendResponse({message: kaka})
+  sendResponse({message: manuallyHighlighted})
 })
