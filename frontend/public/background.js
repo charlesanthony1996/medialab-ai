@@ -28,3 +28,24 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
       console.log("Tab updated and loaded: " + tab.url)
     }
 })
+
+chrome.contextMenus.create({
+  id: "myContextMenu",
+  title: "HS not detected? Mark as hatespeech!",
+  contexts: ['selection']
+})
+
+let kaka
+
+// Add click event listener to the context menu item
+chrome.contextMenus.onClicked.addListener(function(info, tab) {
+  if (info.menuItemId === "myContextMenu") {
+      // Display the selected text in an alert
+      kaka = info.selectionText
+      alert(info.selectionText);
+  }
+});
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  sendResponse({message: kaka})
+})

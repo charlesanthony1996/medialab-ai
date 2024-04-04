@@ -3,8 +3,8 @@
   <v-btn style="width:100px;height:30px;" to="/signup" variant="outlined">Sign up</v-btn>
   <v-btn style="width:100px;height:30px;" to="/signin" variant="outlined">Sign in</v-btn>
   <v-btn style="width:200px;height:30px;font-size:15px;" to="/hatespeech" variant="outlined">Continue as a guest</v-btn>
+  <div id="output">{{ outputMessage }}</div>
   <router-view></router-view>
-
   <p>{{ display }}</p>
   <p v-if="analysisResult">{{ analysisResult }}</p>
 </template>
@@ -15,8 +15,8 @@ import axios from 'axios'
 
 const display = ref('')
 const analysisResult = ref('')
+const outputMessage = ref('')
 
-// Function to select text
 function getSelectedText() {
   if(window.getSelection) {
     return window.getSelection().toString()
@@ -26,7 +26,6 @@ function getSelectedText() {
   return ''
 }
 
-// Update function for the selected text
 function updateDisplayWithSelectedText() {
   const text = getSelectedText()
   display.value = text
@@ -44,15 +43,27 @@ function updateDisplayWithSelectedText() {
 }
 
 onMounted(() => {
-  // Listen for mouse events
   document.addEventListener('mouseup', updateDisplayWithSelectedText)
   document.addEventListener('keyup', updateDisplayWithSelectedText)
+  
 })
 
 onUnmounted(() => {
   document.removeEventListener('mouseup', updateDisplayWithSelectedText)
   document.removeEventListener('keyup', updateDisplayWithSelectedText)
 })
+
+function fetchData(): void {
+  const response: { message: string } = { message: 'This is the response message' }; 
+  chrome.runtime.sendMessage({data: response}, (response) => {
+    console.log(response);
+    outputMessage.value = response.message;
+  });
+}
+
+fetchData();
+
+setInterval(fetchData, 1000);
 </script>
 
 <style scoped>
