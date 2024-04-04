@@ -99,3 +99,5 @@ window.addEventListener('scroll', () => {
     document.querySelectorAll('.yt-core-attributed-string.yt-core-attributed-string--white-space-pre-wrap')
     .forEach(comment => observerForCopy.observe(comment));
 });
+
+

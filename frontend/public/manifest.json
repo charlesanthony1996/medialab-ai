@@ -8,7 +8,7 @@
         "default_popup": "index.html",
         "default_title": "Hate Speech Application Extension"
     },
-    "permissions": ["tabs", "activeTab", "storage", "background", "scripting", "runtime"],
+    "permissions": ["tabs", "activeTab", "storage", "background", "scripting", "runtime", "contextMenus"],
     "content_scripts": [
         {
           "matches": ["*://*.youtube.com/*"],
