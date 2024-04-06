@@ -13,21 +13,32 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import axios from 'axios'
-// import firebase from 'firbase/compat/app'
+import { useRouter } from 'vue-router'
+import firebase from 'firebase/compat/app'
 import "firebase/compat/firestore";
 import "firebase/compat/auth";
-
 
 
 const display = ref('')
 const analysisResult = ref('')
 const outputMessage = ref('')
 const isLoggedIn = ref(true)
+const router = useRouter()
 
 
-// firebase intialization
+// firebase intialization code here
+firebase.auth().onAuthStateChanged(function (user) {
+  if (user) {
+    isLoggedIn.value = true
+  } else {
+    isLoggedIn.value = false
+  }
+})
 
-
+const signOut = () => {
+  firebase.auth().signOut()
+  router.push('/')
+}
 
 
 function getSelectedText() {
