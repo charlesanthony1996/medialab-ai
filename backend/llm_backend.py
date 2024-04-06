@@ -30,6 +30,8 @@ def analyze_hate_speech(text):
     )
 
     analysis_result = response.choices[0].message.content.strip()
+    # response endpoint changed
+    # refer to -> https://stackoverflow.com/questions/77444332/openai-python-package-error-chatcompletion-object-is-not-subscriptable
     # response_message = response.choices[0].message.content
     return analysis_result, None
   except Exception as e:
