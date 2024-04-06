@@ -25,11 +25,14 @@ def get_comments():
     data = {"comment": "first comment"}
     return jsonify(data)
 
+# just another dummy route
+# no use of this to the frontend right not
 @app.route("/extension/default", methods=["GET"])
 def get_default_extension():
     data = { "prompt": "Highlighted"}
     return jsonify(data)
 
+# route thats used to process the comments from the frontend
 @app.route('/api/process_comments', methods=['GET'])
 def process_comments():
     comments = request.json.get('comments', [])
@@ -40,7 +43,9 @@ def process_comments():
     
     return jsonify({'processed comments: ', processed_comments})
 
-
+# gpt 3.5 turbo respones is attached to this route from the frontend.
+# refer to app.vue to the call from the frontend
+# this should be moved to the llm backend.py
 @app.route('/api/analyze_text', methods=['POST'])
 def analyze_text():
     try:
