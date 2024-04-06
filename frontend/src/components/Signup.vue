@@ -1,10 +1,10 @@
 <template>
     <v-text>Name</v-text>
-    <v-text-field label="Name" v-model="name"></v-text-field>
+    <v-text-field label="name" v-model="name"></v-text-field>
     <v-text>Email</v-text>
-    <v-text-field label="Email" v-model="email"></v-text-field>
+    <v-text-field label="email" v-model="email"></v-text-field>
     <v-text>Password</v-text>
-    <v-text-field label="Password" v-model="password"></v-text-field>
+    <v-text-field label="password" v-model="password"></v-text-field>
 </template>
 
 

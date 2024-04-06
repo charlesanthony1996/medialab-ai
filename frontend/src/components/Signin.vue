@@ -1,10 +1,10 @@
 <template>
-    <v-text>Username or email</v-text>
-    <v-text-field label="Email"></v-text-field>
+    <v-text>Email</v-text>
+    <v-text-field type="text" label="email" v-model="email"></v-text-field>
     <v-text>Password</v-text>
-    <v-text-field label="Password"></v-text-field>
+    <v-text-field type="text" label="password" v-model="password"></v-text-field>
     <p v-if="errMsg">{{ errMsg }}</p>
-    <button variant="outlined" @click="signIn">Submit</button>
+    <v-btn variant="outlined" @click="signIn">Submit</v-btn>
 
 
 </template>
@@ -18,6 +18,7 @@ import { useRouter } from 'vue-router'
 const email = ref("")
 const password = ref("")
 const router = useRouter()
+const errMsg = ref("")
 
 
 const signIn = () => {
@@ -26,7 +27,7 @@ const signIn = () => {
     .signInWithEmailAndPassword(email.value, password.value)
     .then((data) => {
         console.log("sucessfully logged in")
-        router.push("/hatespeech")
+        router.push("/counterspeech")
     })
     .catch(error => {
         switch(error.code) {
