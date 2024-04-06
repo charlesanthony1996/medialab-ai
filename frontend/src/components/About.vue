@@ -1,34 +1,29 @@
-<!-- this com -->
-
 <template>
-    <div>This is the about page</div>
-    <v-btn variant="outlined" @click="fetchData">Fetch data</v-btn>
-  </template>
+    <div>User info page</div>
+    <h3>This page is protected.</h3>
+</template>
   
-  <script>
-  import { ref } from 'vue'
+<script setup>
+  import { ref, computed, onBeforeUnmount} from 'vue'
   import axios from 'axios'
-  
-  export default {
-    setup() {
-      const fetchData = async () => {
-        try {
-          const response = await axios.get('http://localhost:8000/api/data')
-          console.log(response.data.message) 
-        } catch (error) {
-          console.error("There was an error fetching the data", error)
-        }
-      }
+  import firebase from 'firebase/compat/app'
+  import { useRouter } from 'vue-router'
 
-      return {
-        fetchData,
-      }
-    },
-  }
-  </script>
+  const router = useRouter()
+  const authListener = firebase.auth().onAuthStateChanged(function (user) {
+    if(!user) {
+      alert("you must be logged in to see this")
+      router.push("/")
+    }
+  })
+
+  onBeforeUnmount(() => {
+    authListener()
+  })
+</script>
   
-  <style>
+<style scoped>
 
   
-  </style>
+</style>
   
