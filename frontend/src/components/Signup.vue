@@ -1,14 +1,15 @@
 <template>
     <v-text>Name</v-text>
-    <v-text-field label="name" v-model="name"></v-text-field>
+    <v-text-field type="text" label="name"></v-text-field>
     <v-text>Email</v-text>
-    <v-text-field label="email" v-model="email"></v-text-field>
+    <v-text-field type="text" label="email" v-model="email"></v-text-field>
     <v-text>Password</v-text>
-    <v-text-field label="password" v-model="password"></v-text-field>
+    <v-text-field type="password" label="password" v-model="password"></v-text-field>
+    <v-btn variant="outlined" @click="register">Register</v-btn>
 </template>
 
 
-<script>
+<script setup>
 import { ref, computed } from 'vue'
 import firebase from "firebase/compat/app"
 import { useRouter } from 'vue-router'
