@@ -30,17 +30,31 @@ function updateDisplayWithSelectedText() {
   const text = getSelectedText()
   display.value = text
 
-  if(text.trim().length > 0) {
-    axios.post('http://localhost:8000/api/analyze_text', { text: text.trim() })
-    .then((response) => {
-      console.log("analysis result: ", response.data)
-      analysisResult.value = response.data.counterSpeech || response.data.message || ''
-    })
-    .catch((error) => {
-      console.error("Error sending text for analysis: ", error)
-    })
+  if (text.trim().length > 0) {
+    axios.post('http://localhost:8000/api/filter', { text: text.trim() })
+      .then((response) => {
+        console.log("filter result: ", response.data)
+        analysisResult.value = response.data.filtered_text
+
+        if (response.data.filtered_text !== 'Is not HS') {
+          
+          // Reuse the existing 'text' variable, no need to get it again
+          axios.post('http://localhost:8000/api/analyze_text', { text: text.trim() })
+            .then((response) => {
+              console.log("analysis result: ", response.data)
+              analysisResult.value = response.data.counterSpeech || response.data.message || ''
+            })
+            .catch((error) => {
+              console.error("Error sending text for analysis: ", error)
+            })
+        }
+      })
+      .catch((error) => {
+        console.error("Error sending text for filtering: ", error)
+      })
   }
 }
+
 
 onMounted(() => {
   document.addEventListener('mouseup', updateDisplayWithSelectedText)
