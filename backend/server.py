@@ -18,7 +18,8 @@ def get_data():
     data = {"message": "This is the data from Flask."}
     return jsonify(data)
 
-# 
+# just a route for testing
+# hooks to the get comments button on hatespeech.vue
 @app.route('/api/comments', methods=['GET'])
 def get_comments():
     data = {"comment": "first comment"}
