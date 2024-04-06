@@ -1,21 +1,15 @@
-# Run in terminal docker build -t twitter-roberta-filter .
-# docker run twitter-roberta-filter
-# Gives error:
-# ImportError:
-# AutoModelForSequenceClassification requires the PyTorch library but it was not found 
-# in your environment. Checkout the instructions on the
+def generate_response(input_text):
+    
+    return input_text
 
-# Dunno how to solve atm.
+# If doing the docker for it, delete the upper generate_response function and remove
+# The python multiline comment from below
 
-# Alternatives maybe to try: use pipeline instead to use twitter roberta from huggingface
-# Or download the model full model of the twitter roberta around 470 Mb and use it where we host
-
-# Maybe not needed here: from flask import Flask, request, jsonify
 """
+# Maybe not needed here: from flask import Flask, request, jsonify
 import numpy as np
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 from scipy.special import softmax
-
 
 # Load the model and tokenizer directly
 tokenizer = AutoTokenizer.from_pretrained("cardiffnlp/twitter-roberta-base-sentiment-latest")
@@ -58,8 +52,10 @@ def generate_response(input_text):
     # Placeholder implementation, replace with actual logic
     
     
-    data = request.json
-    highlighted_text = data.get('text')
+    #data = request.json
+    #highlighted_text = data.get('text')
+    
+    highlighted_text = input
 
     # Process the text
     filtered, text, score = process_text(highlighted_text)
@@ -70,8 +66,3 @@ def generate_response(input_text):
         return 'Is not HS'
     
 """
-
-def generate_response(input_text):
-    
-    return 'Is HS'
-    #return 'Is not HS'

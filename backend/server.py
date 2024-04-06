@@ -84,6 +84,7 @@ def filter_text():
             return jsonify({"error": "No text provided"}), 400
 
         # Call your TwitterRoberta implementation to generate response
+        print("Text sent to the filter, " + text)
         response = generate_response(text)
         
         return jsonify({"filtered_text": response})
