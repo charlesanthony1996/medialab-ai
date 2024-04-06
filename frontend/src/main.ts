@@ -12,6 +12,7 @@ import router from './router'
 import firebase from "firebase/compat/app"
 import "firebase/compat/firestore"
 import "firebase/compat/auth"
+// import { getAnalytics } from "firebase/analytics"
 
 
 const pinia = createPinia()
@@ -20,22 +21,24 @@ const app = createApp(App)
 
 var firebaseConfig = {
 
-  apiKey: "AIzaSyCCbLKyEsJjKrxDbAPNW_dO341ph1T7-iI",
+  apiKey: "AIzaSyAgVuqvT5RUTPJ4PS1oSBHTP8KeyafScVs",
 
-  authDomain: "vue-firebase-automation-d374e.firebaseapp.com",
+  authDomain: "hate-speech-app.firebaseapp.com",
 
-  projectId: "vue-firebase-automation-d374e",
+  projectId: "hate-speech-app",
 
-  storageBucket: "vue-firebase-automation-d374e.appspot.com",
+  storageBucket: "hate-speech-app.appspot.com",
 
-  messagingSenderId: "268727744532",
+  messagingSenderId: "1025959232892",
 
-  appId: "1:268727744532:web:09be67565a89d6170b8f01"
+  appId: "1:1025959232892:web:f90eaf50536a3fb00a50f9",
 
-};
+  measurementId: "G-BTD91QKYB4"
+
+}
 
 // firebase initialization
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig)
 
 const vuetify = createVuetify({
     components,
