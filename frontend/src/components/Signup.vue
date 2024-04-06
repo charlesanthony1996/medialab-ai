@@ -1,5 +1,4 @@
 <template>
-    <p>Sign up here</p>
     <v-text>Name</v-text>
     <v-text-field label="Name" v-model="name"></v-text-field>
     <v-text>Email</v-text>
