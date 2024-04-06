@@ -55,7 +55,7 @@ def analyze_text():
         if not text:
             return jsonify({"error": "No text provided"}), 400
 
-        system_message = "You are an AI trained to detect hate speech and respond with counter-speech if necessary. If no hate speech is detected, respond with 'No hate speech detected.'"
+        system_message = "You are an AI trained to detect hate speech and respond with counter-speech. If no hate speech is detected, respond with 'No hate speech detected.'"
         user_message = text
 
         response = openai.ChatCompletion.create(
