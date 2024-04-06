@@ -3,6 +3,7 @@
   <v-btn style="width:100px;height:30px;" to="/signup" variant="outlined">Sign up</v-btn>
   <v-btn style="width:100px;height:30px;" to="/signin" variant="outlined">Sign in</v-btn>
   <v-btn style="width:200px;height:30px;font-size:15px;" to="/hatespeech" variant="outlined">Continue as a guest</v-btn>
+
   <div id="output">{{ outputMessage }}</div>
   <router-view></router-view>
   <p>{{ display }}</p>
@@ -12,10 +13,22 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import axios from 'axios'
+// import firebase from 'firbase/compat/app'
+import "firebase/compat/firestore";
+import "firebase/compat/auth";
+
+
 
 const display = ref('')
 const analysisResult = ref('')
 const outputMessage = ref('')
+const isLoggedIn = ref(true)
+
+
+// firebase intialization
+
+
+
 
 function getSelectedText() {
   if(window.getSelection) {
