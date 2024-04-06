@@ -18,6 +18,7 @@ def get_data():
     data = {"message": "This is the data from Flask."}
     return jsonify(data)
 
+# 
 @app.route('/api/comments', methods=['GET'])
 def get_comments():
     data = {"comment": "first comment"}
