@@ -3,6 +3,7 @@ from flask_cors import CORS
 from flask import request
 import openai
 from api_keys_file import open_api_key
+from twitterRoberta import generate_response 
 
 openai.api_key = open_api_key
 
@@ -70,4 +71,23 @@ def analyze_text():
         print("Error during text analysis:", str(e))
         return jsonify({"error": str(e)}), 500
 
+
+# New route to handle text filtering
+@app.route('/api/filter', methods=['POST'])
+def filter_text():
+    try:
+        data = request.json
+        text = data.get('text', '')
+
+        if not text:
+            return jsonify({"error": "No text provided"}), 400
+
+        # Call your TwitterRoberta implementation to generate response
+        response = generate_response(text)
+        
+        return jsonify({"filtered_text": response})
+
+    except Exception as e:
+        print("Error during text filtering:", str(e))
+        return jsonify({"error": str(e)}), 500
 
