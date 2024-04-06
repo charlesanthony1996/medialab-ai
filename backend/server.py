@@ -2,10 +2,11 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 from flask import request
 import openai
-from api_keys_file import open_api_key
-from twitterRoberta import generate_response 
+from api_keys_file import open_api_key2
+from twitterRoberta import generate_response
+from llm_backend import analyze_hate_speech
 
-openai.api_key = open_api_key
+openai.api_key = open_api_key2
 
 app = Flask(__name__)
 
@@ -55,19 +56,13 @@ def analyze_text():
         if not text:
             return jsonify({"error": "No text provided"}), 400
 
-        system_message = "You are an AI trained to detect hate speech and respond with counter-speech. If no hate speech is detected, respond with 'No hate speech detected.'"
-        user_message = text
 
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": system_message },
-                {"role": "user", "content": user_message }
-            ]
-        )
-
-        analysis_result = response['choices'][0]['message']['content'].strip()
+        analysis_result, error = analyze_hate_speech(text)
         print("Analysis result:", analysis_result)
+
+        if error:
+            print("Error during text analysis: ", error)
+            return jsonify({"error": error}), 500
 
         if "No hate speech detected." in analysis_result:
             return jsonify({"message": "No hate speech detected."})
