@@ -1,12 +1,6 @@
 <template>
-    <!-- <p>Trying to detect hate speech</p> -->
-    <!-- <p>Your url: {{ url_name1 }}</p> -->
-    <!-- <p>Tab url: {{  tabUrl }}</p> -->
+    <p>Trying to detect hate speech</p>
     <p>Tab url from services: {{ url_name }}</p>
-    <!-- <p>Loaded: {{ tabLoaded }}</p> -->
-    <!-- <v-btn to="" variant="outlined" @click="getComments">Get Comment</v-btn> -->
-    <!-- <p style="">display comments:</p> -->
-    <!-- <div> {{  comment_des }}</div> -->
 
     <li>
         <v-row><p>Hello whats your daily routine like?</p></v-row>
@@ -19,8 +13,6 @@
     <ul>
         <li v-for="(comment, index) in comment_des" :key="index">{{ comment }}</li>
     </ul>
-
-    <!-- receiving the message from background.js here -->
     <div>{{ receivedMessage }}</div>
 </template>
 
@@ -31,7 +23,6 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import axios from 'axios'
 import { getCurrentTab, url_name, getExampleTabAsync, tabLoaded } from '../services/services'
 import { createWatchCompilerHost } from 'typescript'
-// import { refTag } from '../../public/background'
 
 
 const comment_des = ref([])
@@ -58,17 +49,6 @@ const getComments = async () => {
     }
 }
 
-// const isYoutube = computed(() => {
-//     if(url_name === "https://www.youtube.com") {
-//         // write function to start web scraper. trigger function
-//         getComments().then(() => {
-//             console.log("done")
-//         })
-//     } else {
-//         console.log("couldnt connect to server")
-//     }
-// })
-
 
 async function getCurrentTabAsyncFromComponent() {
     return new Promise((resolve, reject) => {
@@ -84,29 +64,6 @@ async function getCurrentTabAsyncFromComponent() {
     })
 }
 
-
-// chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
-//         if (tabs.length > 0) {
-//             url_name1.value = tabs[0].url
-//             return url_name1    
-//         }
-// })
-
-
-
-// async function getExampleTabAsync() {
-// chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-//     if (changeInfo.status === 'complete' && tab.url.includes("http://www.example.com")) {
-//       console.log("Tab updated and loaded: " + tab.url)
-//       tabLoaded.value = "loaded"
-//       return tabLoaded
-//     }
-//     else {
-//         tabLoaded.value = "not loaded"
-//         return tabLoaded
-//     }
-// })
-// }
 
 
 async function sendCommentsToServer() {
@@ -140,26 +97,17 @@ onMounted(async () => {
             console.log("Tab updated and loaded: " + tab.url);
             tabLoaded.value = "loaded"; // This updates the reactive property directly
         } else {
-            tabLoaded.value = "not loaded";
+            tabLoaded.value = "not loaded"
         }
-    };
+    }
 
-    chrome.tabs.onUpdated.addListener(checkTabURL);
-
-    // // getting "hello" here
-    // chrome.runtime.onMessage.addListener((request, sender, sendReponse) => {
-    //     if(request.action === "useTabsAPI") {
-    //         receivedMessage.value = request.data.message
-    //         return receivedMessage
-
-    //     }
-    // })
+    chrome.tabs.onUpdated.addListener(checkTabURL)
 
     try {
-        const status = await getExampleTabAsync();
-        console.log("Tab load status:", status);
+        const status = await getExampleTabAsync()
+        console.log("Tab load status:", status)
     } catch (error) {
-        console.error("Failed to load the tab:", error);
+        console.error("Failed to load the tab:", error)
     }
 
 
@@ -179,15 +127,11 @@ function messageListener(request, sender, sendResponse) {
 }
 
 onMounted(() => {
-    // chrome.runtime.onMessage.addListener(messageListener)
     chrome.runtime.onMessage.addListener(handleMessage)
 })
 
 onUnmounted(() => {
-    // chrome.runtime.onMessage.removeListener(messageListener)
     chrome.runtime.onMessage.removeListener(handleMessage)
-
-    // chrome.tabs.onUpdated.removeListener(checkTabURL);
 })
 
 </script>
