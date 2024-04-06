@@ -67,17 +67,17 @@ onUnmounted(() => {
   document.removeEventListener('keyup', updateDisplayWithSelectedText)
 })
 
-function fetchData(): void {
-  const response: { message: string } = { message: 'This is the response message' }; 
-  chrome.runtime.sendMessage({data: response}, (response) => {
-    console.log(response);
-    outputMessage.value = response.message;
-  });
-}
+// function fetchData(): void {
+//   const response: { message: string } = { message: 'This is the response message' }; 
+//   chrome.runtime.sendMessage({data: response}, (response) => {
+//     console.log(response);
+//     outputMessage.value = response.message;
+//   });
+// }
 
-fetchData();
+// fetchData();
 
-setInterval(fetchData, 1000);
+// setInterval(fetchData, 1000);
 </script>
 
 <style scoped>
