@@ -37,6 +37,4 @@ def analyze_hate_speech(text):
   except Exception as e:
     return None, str(e)
 
-
-
   
