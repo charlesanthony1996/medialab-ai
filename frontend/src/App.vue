@@ -5,12 +5,14 @@
   <v-btn style="width:200px;height:30px;font-size:15px;" to="/hatespeech" variant="outlined">Continue as a guest</v-btn>
 
   <!-- <div id="output">{{ outputMessage }}</div> -->
+  <!-- <p v-if="analysisResult">{{ analysisResult }}</p> -->
+
   <router-view></router-view>
-  <!-- <p>{{ display }}</p>
-  <p v-if="analysisResult">{{ analysisResult }}</p> -->
+  <br>
+  <p v-if="analysisResult">{{ analysisResult }}</p>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
@@ -21,7 +23,7 @@ import "firebase/compat/auth"
 
 const display = ref('')
 const analysisResult = ref('')
-const outputMessage = ref('')
+// const outputMessage = ref('')
 const isLoggedIn = ref(true)
 const router = useRouter()
 
@@ -35,12 +37,14 @@ firebase.auth().onAuthStateChanged(function (user) {
   }
 })
 
+// sign out function for firebase
 const signOut = () => {
   firebase.auth().signOut()
   router.push('/')
 }
 
 
+// function to higlight selected text
 function getSelectedText() {
   if(window.getSelection) {
     return window.getSelection().toString()
@@ -50,16 +54,18 @@ function getSelectedText() {
   return ''
 }
 
+// after highlighted the text is sent to the backend to get a response from the openai api
 async function updateDisplayWithSelectedText() {
   const text = getSelectedText();
   display.value = text;
   if (text.trim().length > 0) {
     try {
-      const response = await axios.post('http://localhost:8000/api/analyze_text', { text: text.trim() });
-      console.log("analysis result: ", response.data);
-      analysisResult.value = response.data.counterSpeech || response.data.message || '';
+      const response = await axios.post('http://localhost:8000/api/analyze_text', { text: text.trim() })
+      console.log("analysis result: ", response.data)
+      analysisResult.value = response.data.counterSpeech || response.data.message || ''
+      // analysisResult.value = response.data
     } catch (error) {
-      console.error("Error sending text for analysis: ", error);
+      console.error("Error sending text for analysis: ", error)
     }
   }
 }
