@@ -21,7 +21,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import axios from 'axios'
-import { getCurrentTab, url_name, getExampleTabAsync, tabLoaded } from '../services/services'
+import { getCurrentTab, url_name, getExampleTabAsync, tabLoaded, isChromeExtension } from '../services/services'
 // import { createWatchCompilerHost } from 'typescript'
 
 
@@ -85,39 +85,47 @@ function handleMessage(message, sender, sendResponse) {
 
 }
 
+function setupChromeListeners() {
+    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+        if(request.action === "useTabsAPI") {
+            receivedMessage.value = request.data.message
+            sendResponse({status: "Message received"})
+        }
+    })
+}
 
 onMounted(async () => {
 
     // trying to see whether you see loaded or not for example.com
-    tabUrl.value = await getCurrentTabAsyncFromComponent()
-    await getCurrentTabAsyncFromComponent()
+    // tabUrl.value = await getCurrentTabAsyncFromComponent()
+    // await getCurrentTabAsyncFromComponent()
 
-    const checkTabURL = (tabId, changeInfo, tab) => {
-        if (changeInfo.status === 'complete' && tab.url.includes("http://www.example.com")) {
-            console.log("Tab updated and loaded: " + tab.url);
-            tabLoaded.value = "loaded"; // This updates the reactive property directly
-        } else {
-            tabLoaded.value = "not loaded"
-        }
-    }
+    // const checkTabURL = (tabId, changeInfo, tab) => {
+    //     if (changeInfo.status === 'complete' && tab.url.includes("http://www.example.com")) {
+    //         console.log("Tab updated and loaded: " + tab.url);
+    //         tabLoaded.value = "loaded"; // This updates the reactive property directly
+    //     } else {
+    //         tabLoaded.value = "not loaded"
+    //     }
+    // }
 
-    chrome.tabs.onUpdated.addListener(checkTabURL)
+    // chrome.tabs.onUpdated.addListener(checkTabURL)
 
-    try {
-        const status = await getExampleTabAsync()
-        console.log("Tab load status:", status)
-    } catch (error) {
-        console.error("Failed to load the tab:", error)
-    }
+    // try {
+    //     const status = await getExampleTabAsync()
+    //     console.log("Tab load status:", status)
+    // } catch (error) {
+    //     console.error("Failed to load the tab:", error)
+    // }
 
 
     // url_name
-    try {
-        await getCurrentTab()
-        console.log(url_name.value)
-    } catch(error) {
-        console.log(error)
-    }
+    // try {
+    //     await getCurrentTab()
+    //     console.log(url_name.value)
+    // } catch(error) {
+    //     console.log(error)
+    // }
 })
 
 function messageListener(request, sender, sendResponse) {
@@ -127,11 +135,17 @@ function messageListener(request, sender, sendResponse) {
 }
 
 onMounted(() => {
-    chrome.runtime.onMessage.addListener(handleMessage)
+    // chrome.runtime.onMessage.addListener(handleMessage)
+    if(isChromeExtension()) {
+        setupChromeListeners()
+    }
 })
 
 onUnmounted(() => {
-    chrome.runtime.onMessage.removeListener(handleMessage)
+    // chrome.runtime.onMessage.removeListener(handleMessage)
+    if(isChromeExtension()) {
+        chrome.runtime.onMessage.removeListener(setupChromeListeners)
+    }
 })
 
 </script>

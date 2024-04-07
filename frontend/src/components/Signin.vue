@@ -6,8 +6,6 @@
     <v-text-field type="password" label="password" v-model="password"></v-text-field>
     <p v-if="errMsg">{{ errMsg }}</p>
     <v-btn variant="outlined" @click="signIn">Submit</v-btn>
-
-
 </template>
 
 
