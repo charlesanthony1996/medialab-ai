@@ -4,10 +4,10 @@
   <v-btn style="width:100px;height:30px;" to="/signin" variant="outlined">Sign in</v-btn>
   <v-btn style="width:200px;height:30px;font-size:15px;" to="/hatespeech" variant="outlined">Continue as a guest</v-btn>
 
-  <div id="output">{{ outputMessage }}</div>
+  <!-- <div id="output">{{ outputMessage }}</div> -->
   <router-view></router-view>
-  <p>{{ display }}</p>
-  <p v-if="analysisResult">{{ analysisResult }}</p>
+  <!-- <p>{{ display }}</p>
+  <p v-if="analysisResult">{{ analysisResult }}</p> -->
 </template>
 
 <script setup lang="ts">
@@ -50,32 +50,17 @@ function getSelectedText() {
   return ''
 }
 
-function updateDisplayWithSelectedText() {
-  const text = getSelectedText()
-  display.value = text
-
+async function updateDisplayWithSelectedText() {
+  const text = getSelectedText();
+  display.value = text;
   if (text.trim().length > 0) {
-    axios.post('http://localhost:8000/api/filter', { text: text.trim() })
-      .then((response) => {
-        console.log("filter result: ", response.data)
-        analysisResult.value = response.data.filtered_text
-
-        if (response.data.filtered_text !== 'Is not HS') {
-          
-          // Reuse the existing 'text' variable, no need to get it again
-          axios.post('http://localhost:8000/api/analyze_text', { text: text.trim() })
-            .then((response) => {
-              console.log("analysis result: ", response.data)
-              analysisResult.value = response.data.counterSpeech || response.data.message || ''
-            })
-            .catch((error) => {
-              console.error("Error sending text for analysis: ", error)
-            })
-        }
-      })
-      .catch((error) => {
-        console.error("Error sending text for filtering: ", error)
-      })
+    try {
+      const response = await axios.post('http://localhost:8000/api/analyze_text', { text: text.trim() });
+      console.log("analysis result: ", response.data);
+      analysisResult.value = response.data.counterSpeech || response.data.message || '';
+    } catch (error) {
+      console.error("Error sending text for analysis: ", error);
+    }
   }
 }
 
