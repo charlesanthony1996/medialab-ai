@@ -1,0 +1,26 @@
+{
+  "name": "vite-project",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@google-cloud/firestore": "^6.4.1",
+    "@react-native-firebase/app": "^16.4.2",
+    "@react-native-firebase/firestore": "^16.4.2",
+    "firebase": "^9.23.0",
+    "firebase-admin": "^11.2.0",
+    "typescript": "^4.8.4",
+    "vue": "^3.2.41",
+    "vue-router": "^4.3.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^3.2.0",
+    "@vue/cli-plugin-router": "~5.0.0",
+    "vite": "^3.2.0"
+  }
+}
