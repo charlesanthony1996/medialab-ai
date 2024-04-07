@@ -1,4 +1,5 @@
 <template>
+    <br>
     <v-text>Email</v-text>
     <v-text-field type="text" label="email" v-model="email"></v-text-field>
     <v-text>Password</v-text>

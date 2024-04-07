@@ -1,4 +1,5 @@
 <template>
+    <br>
     <v-text>Name</v-text>
     <v-text-field type="text" label="name"></v-text-field>
     <v-text>Email</v-text>
@@ -28,7 +29,7 @@ const register = () => {
     })
     .catch(error => {
         console.log(error.code)
-        alert(error.message)
+        // alert(error.message)
     })
 }
 

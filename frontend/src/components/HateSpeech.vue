@@ -1,6 +1,6 @@
 <template>
     <p>Trying to detect hate speech</p>
-    <p>Tab url from services: {{ url_name }}</p>
+    <!-- <p>Tab url from services: {{ url_name }}</p> -->
 
     <li>
         <v-row><p>Hello whats your daily routine like?</p></v-row>
@@ -22,7 +22,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import axios from 'axios'
 import { getCurrentTab, url_name, getExampleTabAsync, tabLoaded } from '../services/services'
-import { createWatchCompilerHost } from 'typescript'
+// import { createWatchCompilerHost } from 'typescript'
 
 
 const comment_des = ref([])
@@ -34,38 +34,38 @@ const tabUrl = ref('')
 // const url_name = ref('')
 const url_name1 = ref('')
 
-function testFunction() {
-    console.log("test function")
-}
+// function testFunction() {
+//     console.log("test function")
+// }
 
-const getComments = async () => {
-    try{
-        const response = await axios.get("http://localhost:8000/api/comments")
-        comment_des.value = response.data.comment
-        console.log(comment_des)
-    }
-    catch(error) {
-        console.log(error)
-    }
-}
-
-
-async function getCurrentTabAsyncFromComponent() {
-    return new Promise((resolve, reject) => {
-        chrome.tabs.query({ active: true, currentWindow: true}, (tabs) => {
-            if (chrome.runtime.lastError) {
-                reject(new Error(chrome.runtime.lastError))
-                // tabLoaded.value = "loaded"
-            } else {
-                resolve(tabs.length > 0 ? tabs[0].url : '')
-                // tabLoaded.value = "not loaded"
-            }
-        })
-    })
-}
+// const getComments = async () => {
+//     try{
+//         const response = await axios.get("http://localhost:8000/api/comments")
+//         comment_des.value = response.data.comment
+//         console.log(comment_des)
+//     }
+//     catch(error) {
+//         console.log(error)
+//     }
+// }
 
 
+// async function getCurrentTabAsyncFromComponent() {
+//     return new Promise((resolve, reject) => {
+//         chrome.tabs.query({ active: true, currentWindow: true}, (tabs) => {
+//             if (chrome.runtime.lastError) {
+//                 reject(new Error(chrome.runtime.lastError))
+//                 // tabLoaded.value = "loaded"
+//             } else {
+//                 resolve(tabs.length > 0 ? tabs[0].url : '')
+//                 // tabLoaded.value = "not loaded"
+//             }
+//         })
+//     })
+// }
 
+
+// processing comments to the backend -> check server.py
 async function sendCommentsToServer() {
     const comments = Array.from(document.querySelectorAll('v-row p')).map(p => p.innerText)
     console.log(comments)
@@ -77,7 +77,7 @@ async function sendCommentsToServer() {
     }
 }
 
-
+// function to handle the update comments action from content script.js
 function handleMessage(message, sender, sendResponse) {
     if(message.action === "updateComments") {
         comment_des.value = message.comments

@@ -1,4 +1,5 @@
 <template>
+    <p>Counter speech page</p>
     
 </template>
 
