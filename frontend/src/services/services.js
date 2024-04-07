@@ -38,6 +38,11 @@ export function getExampleTabAsync() {
     });
 }
 
+// is it a chrome extension?
+export function isChromeExtension() {
+    return typeof chrome != 'undefined' && chrome.runtime && chrome.runtime.id
+}
+
 
 onMounted(async () => {
 
