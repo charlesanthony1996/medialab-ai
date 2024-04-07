@@ -43,6 +43,9 @@ export function isChromeExtension() {
     return typeof chrome != 'undefined' && chrome.runtime && chrome.runtime.id
 }
 
+// get the current tab that the user is in
+
+
 
 onMounted(async () => {
 

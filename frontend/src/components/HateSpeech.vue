@@ -85,6 +85,7 @@ function handleMessage(message, sender, sendResponse) {
 
 }
 
+// this will only run in a chrome extension environment
 function setupChromeListeners() {
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         if(request.action === "useTabsAPI") {
@@ -128,6 +129,8 @@ onMounted(async () => {
     // }
 })
 
+// message listener to get the hello from contentscript.js
+// displaying the value on the template is commented out for now
 function messageListener(request, sender, sendResponse) {
     if(request.action === "useTabsAPI") {
         receivedMessage.value = request.data.message
