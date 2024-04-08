@@ -49,23 +49,41 @@ export function isChromeExtension() {
 
 export async function getCurrentTab() {
     if (!isChromeExtension()) {
-        console.log("This function is only available in a Chrome extension.");
-        return;
+        console.log("This function is only available in a Chrome extension.")
+        return
     }
     try {
-        const tabs = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+        const tabs = await chrome.tabs.query({ active: true, lastFocusedWindow: true })
         if (tabs.length > 0) {
-            url_name.value = tabs[0].url;
-            console.log("Current tab URL is:", url_name.value);
+            url_name.value = tabs[0].url
+            console.log("Current tab URL is:", url_name.value)
             return url_name.value;
         } else {
-            throw new Error("No active tab found");
+            throw new Error("No active tab found")
         }
     } catch (error) {
-        console.error("Error fetching current tab:", error.message);
+        console.log("Error fetching current tab:", error.message)
     }
 }
 
+// make extension size constant and not self adjusting
+export async function makePersistent() {
+    if (!isChromeExtension()) {
+        console.log("function only works on chrome")
+    }
+    try {
+        chrome.browserAction.onClicked.addListener(function(tab) {
+            chrome.windows.create({
+                url: chrome.runtime.getURL("popup_index.html"),
+                type: "popup",
+                width: 400,
+                height: 600
+            })
+        })
+    } catch (error) {
+        console.log("Error produced: ", error)
+    }
+}
 
 
 onMounted(async () => {
