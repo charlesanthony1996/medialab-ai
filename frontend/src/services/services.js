@@ -74,7 +74,7 @@ export async function makePersistent() {
     try {
         chrome.browserAction.onClicked.addListener(function(tab) {
             chrome.windows.create({
-                url: chrome.runtime.getURL("popup_index.html"),
+                url: chrome.runtime.getURL("index.html"),
                 type: "popup",
                 width: 400,
                 height: 600
