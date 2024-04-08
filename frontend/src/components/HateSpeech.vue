@@ -2,16 +2,16 @@
     <p>Trying to detect hate speech</p>
     <p>Tab url from services: {{ url_name }}</p>
     <br>
-    <li>
+    <!-- <li>
         <v-row><p>Hello whats your daily routine like?</p></v-row>
         <v-row><p>you suck go fly a kite</p></v-row>
         <v-row><p>Hello how do you do sir?</p></v-row>
         <v-row><p>Fuck you, you a piece of shit. my grandmother can swear better than you!</p></v-row>
-    </li>
+    </li> -->
 
     <!-- <p>Displaying the latest 5 comments</p> -->
     <ul>
-        <li v-for="(comment, index) in comment_des" :key="index">{{ comment }}</li>
+        <v-row v-for="(comment, index) in comment_des" :key="index">{{ index + 1 }}:{{ comment }}</v-row>
     </ul>
     <!-- <div>{{ receivedMessage }}</div> -->
 </template>
