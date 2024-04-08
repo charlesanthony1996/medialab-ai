@@ -1,4 +1,4 @@
-console.log("script loads now 2")
+// console.log("script loads now 2")
 
 // link to the api
 // https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
@@ -43,9 +43,9 @@ const observerCallback = (entries) => {
     
 }
 
-chrome.runtime.sendMessage({action: "useTabsAPI", data: { message: "hello" }}, function(response) {
-    console.log(response.response)
-})
+// chrome.runtime.sendMessage({action: "useTabsAPI", data: { message: "hello" }}, function(response) {
+//     console.log(response.response)
+// })
   
 
 const observerOptions = {

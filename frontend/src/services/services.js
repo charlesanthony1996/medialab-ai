@@ -85,10 +85,29 @@ export async function makePersistent() {
     }
 }
 
+export const comment_des = ref([])
+
+// taken from hatespeech.vue
+export function handleMessage(message, sender, sendResponse) {
+    if(message.action === "updateComments") {
+        comment_des.value = message.comments
+    }
+}
+// message listener for the handleMessage function
+export async function handleMessageListener() {
+    if (!isChromeExtension()) {
+        console.log("this only works on a chrome extension")
+    }
+    else  {
+        chrome.runtime.onMessage.addListener(handleMessage)
+    }
+}
+
 
 onMounted(async () => {
     getCurrentTab()
     url_name
+    await handleMessageListener()
 
     // trying to see whether you see loaded or not for example.com
     // tabUrl.value = await getCurrentTabAsync()

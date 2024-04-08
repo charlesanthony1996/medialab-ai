@@ -21,11 +21,11 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import axios from 'axios'
-import { url_name, isChromeExtension, getCurrentTab } from '../services/services'
+import { url_name, isChromeExtension, getCurrentTab, handleMessage, handleMessageListener, comment_des } from '../services/services'
 // import { createWatchCompilerHost } from 'typescript'
 
 
-const comment_des = ref([])
+// const comment_des = ref([])
 const counterSpeechPrompt = ref('')
 // console.log(refTag.value)
 const receivedMessage = ref('')
@@ -78,12 +78,11 @@ async function sendCommentsToServer() {
 }
 
 // function to handle the update comments action from content script.js
-function handleMessage(message, sender, sendResponse) {
-    if(message.action === "updateComments") {
-        comment_des.value = message.comments
-    }
-
-}
+// function handleMessage(message, sender, sendResponse) {
+//     if(message.action === "updateComments") {
+//         comment_des.value = message.comments
+//     }
+// }
 
 // this will only run in a chrome extension environment
 function setupChromeListeners() {
@@ -131,28 +130,31 @@ onMounted(async () => {
 
 onMounted(async () => {
     await getCurrentTab()
+    await handleMessageListener()
 })
 
 // message listener to get the hello from contentscript.js
 // displaying the value on the template is commented out for now
-function messageListener(request, sender, sendResponse) {
-    if(request.action === "useTabsAPI") {
-        receivedMessage.value = request.data.message
-    }
-}
+// function messageListener(request, sender, sendResponse) {
+//     if(request.action === "useTabsAPI") {
+//         receivedMessage.value = request.data.message
+//     }
+// }
 
 onMounted(() => {
-    chrome.runtime.onMessage.addListener(handleMessage)
+    // chrome.runtime.onMessage.addListener(handleMessage)
     if(isChromeExtension()) {
         setupChromeListeners()
     }
 })
 
 onUnmounted(() => {
-    chrome.runtime.onMessage.removeListener(handleMessage)
+    // chrome.runtime.onMessage.removeListener(handleMessage)
     if(isChromeExtension()) {
         chrome.runtime.onMessage.removeListener(setupChromeListeners)
     }
+
+    // handleMessageListener()
 })
 
 </script>
