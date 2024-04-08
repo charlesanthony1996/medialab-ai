@@ -120,11 +120,11 @@ window.addEventListener('scroll', () => {
 })
 
 // using the same consistent extension size function from services
-chrome.browserAction.onClicked.addListener(function(tab) {
-    chrome.windows.create({
-        url: chrome.runtime.getURL("index.html"),
-        type: "popup",
-        width: 400,
-        height: 600
-    })
-})
+// chrome.browserAction.onClicked.addListener(function(tab) {
+//     chrome.windows.create({
+//         url: chrome.runtime.getURL("index.html"),
+//         type: "popup",
+//         width: 400,
+//         height: 800
+//     })
+// })
