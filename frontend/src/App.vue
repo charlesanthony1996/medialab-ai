@@ -1,7 +1,10 @@
 <template>
   <h1 style="font-size:15px;">Hate Speech Application</h1>
-  <v-btn style="width:100px;height:30px;" to="/signup" variant="outlined">Sign up</v-btn>
-  <v-btn style="width:100px;height:30px;" to="/signin" variant="outlined">Sign in</v-btn>
+  <!-- conditional buttons -->
+  <v-btn v-if="!isLoggedIn" style="width:100px;height:30px;" to="/signup" variant="outlined">Sign up</v-btn>
+  <v-btn v-if="!isLoggedIn" style="width:100px;height:30px;" to="/signin" variant="outlined">Sign in</v-btn>
+  <v-btn @click="signOut" style="width:100px;height:30px;" variant="outlined">Log out</v-btn>
+  <!-- this should always be visible -->
   <v-btn style="width:200px;height:30px;font-size:15px;" to="/hatespeech" variant="outlined">Continue as a guest</v-btn>
 
   <!-- <div id="output">{{ outputMessage }}</div> -->
@@ -24,7 +27,7 @@ import "firebase/compat/auth"
 const display = ref('')
 const analysisResult = ref('')
 // const outputMessage = ref('')
-const isLoggedIn = ref(true)
+const isLoggedIn = ref(false)
 const router = useRouter()
 
 
