@@ -1,6 +1,6 @@
 <template>
     <p>Trying to detect hate speech</p>
-    <!-- <p>Tab url from services: {{ url_name }}</p> -->
+    <p>Tab url from services: {{ url_name }}</p>
     <br>
     <li>
         <v-row><p>Hello whats your daily routine like?</p></v-row>
@@ -13,7 +13,7 @@
     <ul>
         <li v-for="(comment, index) in comment_des" :key="index">{{ comment }}</li>
     </ul>
-    <div>{{ receivedMessage }}</div>
+    <!-- <div>{{ receivedMessage }}</div> -->
 </template>
 
 
@@ -21,7 +21,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import axios from 'axios'
-import { getCurrentTab, url_name, getExampleTabAsync, tabLoaded, isChromeExtension } from '../services/services'
+import { url_name, isChromeExtension, getCurrentTab } from '../services/services'
 // import { createWatchCompilerHost } from 'typescript'
 
 
@@ -127,6 +127,10 @@ onMounted(async () => {
     // } catch(error) {
     //     console.log(error)
     // }
+})
+
+onMounted(async () => {
+    await getCurrentTab()
 })
 
 // message listener to get the hello from contentscript.js
