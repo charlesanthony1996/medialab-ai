@@ -142,14 +142,14 @@ function messageListener(request, sender, sendResponse) {
 }
 
 onMounted(() => {
-    // chrome.runtime.onMessage.addListener(handleMessage)
+    chrome.runtime.onMessage.addListener(handleMessage)
     if(isChromeExtension()) {
         setupChromeListeners()
     }
 })
 
 onUnmounted(() => {
-    // chrome.runtime.onMessage.removeListener(handleMessage)
+    chrome.runtime.onMessage.removeListener(handleMessage)
     if(isChromeExtension()) {
         chrome.runtime.onMessage.removeListener(setupChromeListeners)
     }
