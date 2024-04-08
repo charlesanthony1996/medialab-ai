@@ -107,16 +107,24 @@ const observerOptionsForCopy = {
     root: null,
     rootMargin: '10px',
     threshold: 0.5
-};
+}
 
-const observerForCopy = new IntersectionObserver(observerCallbackForCopy, observerOptionsForCopy);
+const observerForCopy = new IntersectionObserver(observerCallbackForCopy, observerOptionsForCopy)
 
 document.querySelectorAll('.yt-core-attributed-string.yt-core-attributed-string--white-space-pre-wrap')
-    .forEach(comment => observerForCopy.observe(comment));
+    .forEach(comment => observerForCopy.observe(comment))
 
 window.addEventListener('scroll', () => {
     document.querySelectorAll('.yt-core-attributed-string.yt-core-attributed-string--white-space-pre-wrap')
-    .forEach(comment => observerForCopy.observe(comment));
-});
+    .forEach(comment => observerForCopy.observe(comment))
+})
 
-
+// using the same consistent extension size function from services
+chrome.browserAction.onClicked.addListener(function(tab) {
+    chrome.windows.create({
+        url: chrome.runtime.getURL("index.html"),
+        type: "popup",
+        width: 400,
+        height: 600
+    })
+})
