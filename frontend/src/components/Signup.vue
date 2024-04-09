@@ -25,7 +25,7 @@ const register = () => {
     .createUserWithEmailAndPassword(email.value, password.value)
     .then((data) => {
         console.log("succesfully registered")
-        router.push("/about")
+        router.push("/hatespeech")
     })
     .catch(error => {
         console.log(error.code)

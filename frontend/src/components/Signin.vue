@@ -26,7 +26,7 @@ const signIn = () => {
     .signInWithEmailAndPassword(email.value, password.value)
     .then((data) => {
         console.log("sucessfully logged in")
-        router.push("/counterspeech")
+        router.push("/hatespeech")
     })
     .catch(error => {
         switch(error.code) {
