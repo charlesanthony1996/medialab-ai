@@ -8,12 +8,10 @@
         <v-row><p>Hello how do you do sir?</p></v-row>
         <v-row><p>Fuck you, you a piece of shit. my grandmother can swear better than you!</p></v-row>
     </li> -->
-
     <!-- <p>Displaying the latest 5 comments</p> -->
-    <ul>
-        <v-row v-for="(comment, index) in comment_des" :key="index">{{ index + 1 }}:{{ comment }}</v-row>
-    </ul>
-    <!-- <div>{{ receivedMessage }}</div> -->
+    <v-row style="display:flex;">
+        <v-btn style="" variant="outlined" v-for="(comment, index) in comment_des" :key="index">{{ index + 1 }}:{{ comment }}</v-btn>
+    </v-row>
 </template>
 
 

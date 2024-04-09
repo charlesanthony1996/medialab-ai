@@ -8,7 +8,7 @@ const observerCallback = (entries) => {
     entries.forEach(entry => {
         if(entry.isIntersecting) {
             observedComments.add(entry.target)
-            entry.target.style.backgroundColor = 'red'
+            entry.target.style.backgroundColor = 'lightcoral'
 
         } else {
             observedComments.delete(entry.target)
@@ -36,7 +36,7 @@ const observerCallback = (entries) => {
 
         // add the styling here to the comment
         // comment.highlight.add('highlight')
-        comment.style.backgroundColor = 'red'
+        comment.style.backgroundColor = 'lightcoral'
     })
 
     chrome.runtime.sendMessage({ action: "updateComments", comments: latestComments.map(comment => comment.innerText )})
