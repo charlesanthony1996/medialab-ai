@@ -66,6 +66,7 @@ async function updateDisplayWithSelectedText() {
       const response = await axios.post('http://localhost:8000/api/analyze_text', { text: text.trim() })
       console.log("analysis result: ", response.data)
       analysisResult.value = response.data.counterSpeech || response.data.message || ''
+      // analysisResult.value = response.data.analysis || 'No analysis result returned.'
       // analysisResult.value = response.data
     } catch (error) {
       console.error("Error sending text for analysis: ", error)

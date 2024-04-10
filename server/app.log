@@ -1,0 +1,109 @@
+2024-04-10 13:01:28,264 DEBUG root MainThread : Fetching data
+2024-04-10 13:01:28,270 INFO werkzeug MainThread : [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8000
+ * Running on http://172.26.0.4:8000
+2024-04-10 13:01:28,271 INFO werkzeug MainThread : [33mPress CTRL+C to quit[0m
+2024-04-10 13:04:22,962 INFO werkzeug MainThread : [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8000
+ * Running on http://172.26.0.3:8000
+2024-04-10 13:04:22,963 INFO werkzeug MainThread : [33mPress CTRL+C to quit[0m
+2024-04-10 13:04:41,231 INFO werkzeug Thread-1 (process_request_thread) : 192.168.65.1 - - [10/Apr/2024 13:04:41] "OPTIONS /api/analyze_text HTTP/1.1" 200 -
+2024-04-10 13:04:41,253 DEBUG urllib3.connectionpool Thread-2 (process_request_thread) : Starting new HTTP connection (1): openai_backend:6000
+2024-04-10 13:04:41,256 DEBUG root Thread-2 (process_request_thread) : analysis result: 
+2024-04-10 13:04:41,256 INFO werkzeug Thread-2 (process_request_thread) : 192.168.65.1 - - [10/Apr/2024 13:04:41] "POST /api/analyze_text HTTP/1.1" 200 -
+2024-04-10 13:06:11,748 INFO werkzeug MainThread : [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8000
+ * Running on http://172.27.0.4:8000
+2024-04-10 13:06:11,748 INFO werkzeug MainThread : [33mPress CTRL+C to quit[0m
+2024-04-10 13:07:12,239 INFO werkzeug Thread-1 (process_request_thread) : 192.168.65.1 - - [10/Apr/2024 13:07:12] "OPTIONS /api/analyze_text HTTP/1.1" 200 -
+2024-04-10 13:07:12,278 DEBUG urllib3.connectionpool Thread-2 (process_request_thread) : Starting new HTTP connection (1): openai_backend:6000
+2024-04-10 13:07:12,292 DEBUG root Thread-2 (process_request_thread) : analysis result: 
+2024-04-10 13:07:12,293 INFO werkzeug Thread-2 (process_request_thread) : 192.168.65.1 - - [10/Apr/2024 13:07:12] "POST /api/analyze_text HTTP/1.1" 200 -
+2024-04-10 13:10:39,989 INFO werkzeug MainThread : [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8000
+ * Running on http://172.28.0.3:8000
+2024-04-10 13:10:39,992 INFO werkzeug MainThread : [33mPress CTRL+C to quit[0m
+2024-04-10 13:10:52,443 INFO werkzeug Thread-1 (process_request_thread) : 192.168.65.1 - - [10/Apr/2024 13:10:52] "OPTIONS /api/analyze_text HTTP/1.1" 200 -
+2024-04-10 13:10:52,448 DEBUG root Thread-2 (process_request_thread) : Received text for analysis: You made God sad today, Mom.” No coming back from that! Hahahahaha!
+2024-04-10 13:10:52,459 DEBUG urllib3.connectionpool Thread-2 (process_request_thread) : Starting new HTTP connection (1): openai_backend:6000
+2024-04-10 13:10:52,463 DEBUG root Thread-2 (process_request_thread) : Analysis result: {'error': "Failed to connect to backend: HTTPConnectionPool(host='openai_backend', port=6000): Max retries exceeded with url: /analyze (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xffffa1e098b0>: Failed to establish a new connection: [Errno 111] Connection refused'))"}
+2024-04-10 13:10:52,465 INFO werkzeug Thread-2 (process_request_thread) : 192.168.65.1 - - [10/Apr/2024 13:10:52] "POST /api/analyze_text HTTP/1.1" 200 -
+2024-04-10 13:11:18,161 INFO werkzeug Thread-3 (process_request_thread) : 192.168.65.1 - - [10/Apr/2024 13:11:18] "OPTIONS /api/analyze_text HTTP/1.1" 200 -
+2024-04-10 13:11:18,165 DEBUG root Thread-4 (process_request_thread) : Received text for analysis: Don't you be disrespectful to her!” Season 10 Episode 1: The Conjugal Conjecture
+2024-04-10 13:11:18,168 DEBUG urllib3.connectionpool Thread-4 (process_request_thread) : Starting new HTTP connection (1): openai_backend:6000
+2024-04-10 13:11:18,170 DEBUG root Thread-4 (process_request_thread) : Analysis result: {'error': "Failed to connect to backend: HTTPConnectionPool(host='openai_backend', port=6000): Max retries exceeded with url: /analyze (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xffffa1e093d0>: Failed to establish a new connection: [Errno 111] Connection refused'))"}
+2024-04-10 13:11:18,170 INFO werkzeug Thread-4 (process_request_thread) : 192.168.65.1 - - [10/Apr/2024 13:11:18] "POST /api/analyze_text HTTP/1.1" 200 -
+2024-04-10 13:12:41,378 INFO werkzeug Thread-5 (process_request_thread) : 192.168.65.1 - - [10/Apr/2024 13:12:41] "OPTIONS /api/analyze_text HTTP/1.1" 200 -
+2024-04-10 13:12:41,382 DEBUG root Thread-6 (process_request_thread) : Received text for analysis: he “yes ma’am” says it all
+2024-04-10 13:12:41,394 DEBUG urllib3.connectionpool Thread-6 (process_request_thread) : Starting new HTTP connection (1): openai_backend:6000
+2024-04-10 13:12:41,398 DEBUG root Thread-6 (process_request_thread) : Analysis result: {'error': "Failed to connect to backend: HTTPConnectionPool(host='openai_backend', port=6000): Max retries exceeded with url: /analyze (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xffffa1e0b170>: Failed to establish a new connection: [Errno 111] Connection refused'))"}
+2024-04-10 13:12:41,399 INFO werkzeug Thread-6 (process_request_thread) : 192.168.65.1 - - [10/Apr/2024 13:12:41] "POST /api/analyze_text HTTP/1.1" 200 -
+2024-04-10 13:13:52,712 INFO werkzeug MainThread : [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8000
+ * Running on http://172.29.0.4:8000
+2024-04-10 13:13:52,714 INFO werkzeug MainThread : [33mPress CTRL+C to quit[0m
+2024-04-10 13:15:59,782 INFO werkzeug Thread-1 (process_request_thread) : 192.168.65.1 - - [10/Apr/2024 13:15:59] "OPTIONS /api/analyze_text HTTP/1.1" 200 -
+2024-04-10 13:15:59,790 DEBUG root Thread-2 (process_request_thread) : received text for analysis: Sheldon and his mom staring with such looks of "don't sass me"
+2024-04-10 13:15:59,805 DEBUG urllib3.connectionpool Thread-2 (process_request_thread) : Starting new HTTP connection (1): openai_backend:6000
+2024-04-10 13:15:59,812 DEBUG root Thread-2 (process_request_thread) : analysis result: {'error': "Failed to connect to backend: HTTPConnectionPool(host='openai_backend', port=6000): Max retries exceeded with url: /analyze (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xffffaf29dfa0>: Failed to establish a new connection: [Errno 111] Connection refused'))"}
+2024-04-10 13:15:59,815 INFO werkzeug Thread-2 (process_request_thread) : 192.168.65.1 - - [10/Apr/2024 13:15:59] "POST /api/analyze_text HTTP/1.1" 200 -
+2024-04-10 13:16:45,354 INFO werkzeug Thread-3 (process_request_thread) : 192.168.65.1 - - [10/Apr/2024 13:16:45] "OPTIONS /api/analyze_text HTTP/1.1" 200 -
+2024-04-10 13:16:45,358 DEBUG root Thread-4 (process_request_thread) : received text for analysis: Sheldon and his mom staring with such looks of "don't sass m
+2024-04-10 13:16:45,362 DEBUG urllib3.connectionpool Thread-4 (process_request_thread) : Starting new HTTP connection (1): openai_backend:6000
+2024-04-10 13:16:45,363 DEBUG root Thread-4 (process_request_thread) : analysis result: {'error': "Failed to connect to backend: HTTPConnectionPool(host='openai_backend', port=6000): Max retries exceeded with url: /analyze (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xffffaf29d400>: Failed to establish a new connection: [Errno 111] Connection refused'))"}
+2024-04-10 13:16:45,364 INFO werkzeug Thread-4 (process_request_thread) : 192.168.65.1 - - [10/Apr/2024 13:16:45] "POST /api/analyze_text HTTP/1.1" 200 -
+2024-04-10 13:18:11,557 INFO werkzeug Thread-5 (process_request_thread) : 192.168.65.1 - - [10/Apr/2024 13:18:11] "OPTIONS /api/analyze_text HTTP/1.1" 200 -
+2024-04-10 13:18:11,565 DEBUG root Thread-6 (process_request_thread) : received text for analysis: Don't you be disrespectful to her!” Season 10 Episode 1: The Conjugal Conjecture
+2024-04-10 13:18:11,576 DEBUG urllib3.connectionpool Thread-6 (process_request_thread) : Starting new HTTP connection (1): openai_backend:6000
+2024-04-10 13:18:11,581 DEBUG root Thread-6 (process_request_thread) : analysis result: {'error': "Failed to connect to backend: HTTPConnectionPool(host='openai_backend', port=6000): Max retries exceeded with url: /analyze (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xffffaf29f380>: Failed to establish a new connection: [Errno 111] Connection refused'))"}
+2024-04-10 13:18:11,582 INFO werkzeug Thread-6 (process_request_thread) : 192.168.65.1 - - [10/Apr/2024 13:18:11] "POST /api/analyze_text HTTP/1.1" 200 -
+2024-04-10 13:19:34,686 INFO werkzeug Thread-7 (process_request_thread) : 192.168.65.1 - - [10/Apr/2024 13:19:34] "OPTIONS /api/analyze_text HTTP/1.1" 200 -
+2024-04-10 13:19:34,697 DEBUG root Thread-8 (process_request_thread) : received text for analysis: Don't you be disrespectful to her!” Season 10 Episode 1: The Conjugal Conjecture
+2024-04-10 13:19:34,715 DEBUG urllib3.connectionpool Thread-8 (process_request_thread) : Starting new HTTP connection (1): openai_backend:6000
+2024-04-10 13:19:34,721 DEBUG root Thread-8 (process_request_thread) : analysis result: {'error': "Failed to connect to backend: HTTPConnectionPool(host='openai_backend', port=6000): Max retries exceeded with url: /analyze (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xffffaf4918b0>: Failed to establish a new connection: [Errno 111] Connection refused'))"}
+2024-04-10 13:19:34,722 INFO werkzeug Thread-8 (process_request_thread) : 192.168.65.1 - - [10/Apr/2024 13:19:34] "POST /api/analyze_text HTTP/1.1" 200 -
+2024-04-10 13:19:44,099 INFO werkzeug Thread-9 (process_request_thread) : 192.168.65.1 - - [10/Apr/2024 13:19:44] "OPTIONS /api/analyze_text HTTP/1.1" 200 -
+2024-04-10 13:19:44,103 DEBUG root Thread-10 (process_request_thread) : received text for analysis: You’ll get there, you just gotta put some zing on it.”
+2024-04-10 13:19:44,106 DEBUG urllib3.connectionpool Thread-10 (process_request_thread) : Starting new HTTP connection (1): openai_backend:6000
+2024-04-10 13:19:44,109 DEBUG root Thread-10 (process_request_thread) : analysis result: {'error': "Failed to connect to backend: HTTPConnectionPool(host='openai_backend', port=6000): Max retries exceeded with url: /analyze (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xffffaf29ecc0>: Failed to establish a new connection: [Errno 111] Connection refused'))"}
+2024-04-10 13:19:44,109 INFO werkzeug Thread-10 (process_request_thread) : 192.168.65.1 - - [10/Apr/2024 13:19:44] "POST /api/analyze_text HTTP/1.1" 200 -
+2024-04-10 13:19:57,590 INFO werkzeug Thread-11 (process_request_thread) : 192.168.65.1 - - [10/Apr/2024 13:19:57] "OPTIONS /api/analyze_text HTTP/1.1" 200 -
+2024-04-10 13:19:57,594 DEBUG root Thread-12 (process_request_thread) : received text for analysis: Best show ever
+2024-04-10 13:19:57,598 DEBUG urllib3.connectionpool Thread-12 (process_request_thread) : Starting new HTTP connection (1): openai_backend:6000
+2024-04-10 13:19:57,601 DEBUG root Thread-12 (process_request_thread) : analysis result: {'error': "Failed to connect to backend: HTTPConnectionPool(host='openai_backend', port=6000): Max retries exceeded with url: /analyze (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0xffffaf648140>: Failed to establish a new connection: [Errno 111] Connection refused'))"}
+2024-04-10 13:19:57,601 INFO werkzeug Thread-12 (process_request_thread) : 192.168.65.1 - - [10/Apr/2024 13:19:57] "POST /api/analyze_text HTTP/1.1" 200 -
+2024-04-10 13:22:41,841 INFO werkzeug MainThread : [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8000
+ * Running on http://172.30.0.4:8000
+2024-04-10 13:22:41,847 INFO werkzeug MainThread : [33mPress CTRL+C to quit[0m
+2024-04-10 13:23:39,291 INFO werkzeug Thread-1 (process_request_thread) : 192.168.65.1 - - [10/Apr/2024 13:23:39] "OPTIONS /api/analyze_text HTTP/1.1" 200 -
+2024-04-10 13:23:39,308 DEBUG urllib3.connectionpool Thread-2 (process_request_thread) : Starting new HTTP connection (1): openai_backend:6000
+2024-04-10 13:23:39,314 INFO werkzeug Thread-2 (process_request_thread) : 192.168.65.1 - - [10/Apr/2024 13:23:39] "POST /api/analyze_text HTTP/1.1" 200 -
+2024-04-10 13:28:29,559 INFO werkzeug MainThread : [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8000
+ * Running on http://172.31.0.3:8000
+2024-04-10 13:28:29,560 INFO werkzeug MainThread : [33mPress CTRL+C to quit[0m
+2024-04-10 13:30:39,469 INFO werkzeug MainThread : [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8000
+ * Running on http://192.168.16.4:8000
+2024-04-10 13:30:39,470 INFO werkzeug MainThread : [33mPress CTRL+C to quit[0m
+2024-04-10 13:31:17,118 INFO werkzeug Thread-1 (process_request_thread) : 192.168.65.1 - - [10/Apr/2024 13:31:17] "OPTIONS /api/analyze_text HTTP/1.1" 200 -
+2024-04-10 13:31:17,138 DEBUG urllib3.connectionpool Thread-2 (process_request_thread) : Starting new HTTP connection (1): openai_backend:6000
+2024-04-10 13:31:17,143 INFO werkzeug Thread-2 (process_request_thread) : 192.168.65.1 - - [10/Apr/2024 13:31:17] "POST /api/analyze_text HTTP/1.1" 200 -
+2024-04-10 13:57:33,170 DEBUG root MainThread : Fetching data
+2024-04-10 13:57:33,178 INFO werkzeug MainThread : [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8000
+ * Running on http://192.168.112.2:8000
+2024-04-10 13:57:33,179 INFO werkzeug MainThread : [33mPress CTRL+C to quit[0m
+2024-04-10 13:57:50,294 INFO werkzeug Thread-1 (process_request_thread) : 192.168.65.1 - - [10/Apr/2024 13:57:50] "OPTIONS /api/analyze_text HTTP/1.1" 200 -
+2024-04-10 13:57:50,311 DEBUG urllib3.connectionpool Thread-2 (process_request_thread) : Starting new HTTP connection (1): openai_backend:6000
+2024-04-10 13:57:50,315 INFO werkzeug Thread-2 (process_request_thread) : 192.168.65.1 - - [10/Apr/2024 13:57:50] "POST /api/analyze_text HTTP/1.1" 200 -
