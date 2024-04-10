@@ -1,5 +1,3 @@
-// console.log("script loads now 2")
-
 // link to the api
 // https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
 const observedComments = new Set()
@@ -15,12 +13,6 @@ const observerCallback = (entries) => {
             entry.target.style.backgroundColor = ''
         }
     })
-
-    // clear previous highlights
-    // document.querySelectorAll('.highlight').forEach(el => {
-    //     el.classList.remove('highlight')
-    //     el.style.backgroundColor = ''
-    // })
 
     // clearing the comments and only highlighting the latest 5 processed
     observedComments.forEach(comment => {
@@ -42,10 +34,6 @@ const observerCallback = (entries) => {
     chrome.runtime.sendMessage({ action: "updateComments", comments: latestComments.map(comment => comment.innerText )})
     
 }
-
-// chrome.runtime.sendMessage({action: "useTabsAPI", data: { message: "hello" }}, function(response) {
-//     console.log(response.response)
-// })
   
 
 const observerOptions = {
@@ -81,28 +69,6 @@ const observerCallbackForCopy = (entries) => {
     })
 }
 
-// const sendCommentToServer = (commentText) => {
-//     fetch('http://localhost:8000/api/process_comments', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify({ comments: [commentText] })
-//     })
-//     .then(response => {
-//         if (!response.ok) {
-//             throw new Error('Network response was not ok');
-//         }
-//         return response.json();
-//     })
-//     .then(data => {
-//         console.log('Comment sent successfully:', data);
-//     })
-//     .catch(error => {
-//         console.error('Error sending comment to server:', error);
-//     });
-// };
-
 const observerOptionsForCopy = {
     root: null,
     rootMargin: '10px',
@@ -118,13 +84,3 @@ window.addEventListener('scroll', () => {
     document.querySelectorAll('.yt-core-attributed-string.yt-core-attributed-string--white-space-pre-wrap')
     .forEach(comment => observerForCopy.observe(comment))
 })
-
-// using the same consistent extension size function from services
-// chrome.browserAction.onClicked.addListener(function(tab) {
-//     chrome.windows.create({
-//         url: chrome.runtime.getURL("index.html"),
-//         type: "popup",
-//         width: 400,
-//         height: 800
-//     })
-// })

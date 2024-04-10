@@ -1,7 +1,3 @@
-// import { ref } from 'vue'
-
-// const refTag = ref("hello from background.js")
-
 // In background.js
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
@@ -12,16 +8,11 @@ chrome.runtime.onMessage.addListener(
         // sendResponse({response: "Received your message!"})
         sendResponse({response: request.data.message})
       }
-    //   works fine i receive the response from the youtube frontend
       return true
     }
   )
   
-  
-  
-  
-  // In background.js
-  // check why this doesnt work
+
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     if (changeInfo.status === 'complete' && tab.url.includes("http://www.example.com")) {
   
