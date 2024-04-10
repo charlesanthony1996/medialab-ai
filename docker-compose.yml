@@ -6,6 +6,8 @@ services:
       - "8000:8000"
     volumes:
       - ./server:/app
+    env_file:
+      - ./server/.env
     environment:
       - OPEN_API_KEY=${OPEN_API_KEY}
       - FLASK_ENV=development
@@ -17,6 +19,8 @@ services:
     build: ./openai_backend
     ports:
       - "6000:6000"
+    env_file:
+      - ./openai_backend/.env
     environment:
       - OPEN_API_KEY=${OPEN_API_KEY}
     restart: on-failure
@@ -27,8 +31,6 @@ services:
     build: ./database
     ports:
       - "5001:5001"
-
-
 
 
 networks:

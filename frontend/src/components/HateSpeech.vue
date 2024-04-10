@@ -27,10 +27,6 @@ const receivedMessage = ref('')
 const tabUrl = ref('')
 
 
-
-
-
-
 // processing comments to the backend -> check server.py
 async function sendCommentsToServer() {
     const comments = Array.from(document.querySelectorAll('v-row p')).map(p => p.innerText)
@@ -65,14 +61,12 @@ onMounted(async () => {
 
 
 onMounted(() => {
-    // chrome.runtime.onMessage.addListener(handleMessage)
     if(isChromeExtension()) {
         setupChromeListeners()
     }
 })
 
 onUnmounted(() => {
-    // chrome.runtime.onMessage.removeListener(handleMessage)
     if(isChromeExtension()) {
         chrome.runtime.onMessage.removeListener(setupChromeListeners)
     }
