@@ -1,20 +1,11 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import HelloWorld from '../components/HelloWorld.vue'
 import About from '../components/About.vue'
 import HateSpeech from '../components/HateSpeech.vue'
-import CounterSpeech from '../components/CounterSpeech.vue'
 import Signin from '../components/Signin.vue'
 import Signup from '../components/Signup.vue'
 import firebase from "firebase/compat/app"
 
 const routes: Array<RouteRecordRaw> = [
-  {
-    path: '/',
-    name: 'home',
-    component: function () {
-      return import('../components/HelloWorld.vue')
-    },
-  },
   {
     path: '/about',
     name: 'about',
@@ -27,12 +18,6 @@ const routes: Array<RouteRecordRaw> = [
     path: '/hatespeech',
     name: 'hatespeech',
     component: HateSpeech
-  },
-  {
-    path: '/counterspeech',
-    name: 'counterspeech',
-    component: CounterSpeech,
-    meta: { requiresAuth: true }
   },
   {
     path: '/signin',
