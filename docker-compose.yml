@@ -1,5 +1,11 @@
 version: '3.8'
 services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
+    restart: on-failure
+
   server:
     build: ./server
     ports:
