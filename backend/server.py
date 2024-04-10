@@ -1,12 +1,12 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 from flask import request
-import openai
+# import openai
 from api_keys_file import open_api_key2
-from twitterRoberta import generate_response
-from llm_backend import analyze_hate_speech
+# from twitterRoberta import generate_response
+# from llm_backend import analyze_hate_speech
 
-openai.api_key = open_api_key2
+# openai.api_key = open_api_key2
 
 app = Flask(__name__)
 

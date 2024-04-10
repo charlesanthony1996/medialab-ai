@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  server:
+    build: ./server
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./server:/app
+    environment:
+      - OPEN_API_KEY=${OPEN_API_KEY}
+      - FLASK_ENV=development
+    restart: on-failure
+    networks:
+      - backend_network
+
+  openai_backend:
+    build: ./openai_backend
+    ports:
+      - "6000:6000"
+    environment:
+      - OPEN_API_KEY=${OPEN_API_KEY}
+    restart: on-failure
+    networks:
+      - backend_network
+
+  database:
+    build: ./database
+    ports:
+      - "5001:5001"
+
+
+
+
+networks:
+  backend_network:
+    driver: bridge

@@ -10,7 +10,7 @@
     </li> -->
     <!-- <p>Displaying the latest 5 comments</p> -->
     <v-row style="display:flex;">
-        <v-btn style="" variant="outlined" v-for="(comment, index) in comment_des" :key="index">{{ index + 1 }}:{{ comment }}</v-btn>
+        <p style="" variant="outlined" v-for="(comment, index) in comment_des" :key="index">{{ index + 1 }}:{{ comment }}</p>
     </v-row>
 </template>
 
