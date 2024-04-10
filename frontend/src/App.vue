@@ -1,14 +1,11 @@
 <template>
   <h1 style="font-size:15px;">Hate Speech Application</h1>
-  <!-- conditional buttons -->
   <v-btn v-if="!isLoggedIn" style="width:100px;height:30px;" to="/signup" variant="outlined">Sign up</v-btn>
   <v-btn v-if="!isLoggedIn" style="width:100px;height:30px;" to="/signin" variant="outlined">Sign in</v-btn>
   <v-btn @click="signOut" style="width:100px;height:30px;" variant="outlined">Log out</v-btn>
-  <!-- this should always be visible -->
   <v-btn style="width:200px;height:30px;font-size:15px;" to="/hatespeech" variant="outlined">Continue as a guest</v-btn>
 
   <!-- <div id="output">{{ outputMessage }}</div> -->
-  <!-- <p v-if="analysisResult">{{ analysisResult }}</p> -->
 
   <router-view></router-view>
   <br>
@@ -66,8 +63,6 @@ async function updateDisplayWithSelectedText() {
       const response = await axios.post('http://localhost:8000/api/analyze_text', { text: text.trim() })
       console.log("analysis result: ", response.data)
       analysisResult.value = response.data.counterSpeech || response.data.message || ''
-      // analysisResult.value = response.data.analysis || 'No analysis result returned.'
-      // analysisResult.value = response.data
     } catch (error) {
       console.error("Error sending text for analysis: ", error)
     }
