@@ -1,44 +1,21 @@
-# Use build argument to determine the environment (dev or prod)
-ARG ENV=prod
-
-# Stage 1: Base stage for both development and production
-FROM node:16-alpine as base
-
-# Set the working directory in the Docker container
-WORKDIR /app
-
-# Copy package.json and package-lock.json (or yarn.lock) files
+# stage1 as builder
+FROM node:16-alpine as builder
+# Copy the package.json and install dependencies
 COPY package*.json ./
-
-# Install project dependencies
 RUN npm install
-
-# Copy the rest of your project files into the Docker container
+# RUN yarn install
+# Copy rest of the files
 COPY . .
-
-# Stage 2: Development environment setup
-FROM base as development
-
-# Expose port 5000 for the development server
-EXPOSE 5000
-
-# Set the command to start the dev server
-CMD ["npm", "run", "dev"]
-
-# Stage 3: Build stage for production environment
-FROM base as production-build
-
-# Build the application using Vite
+# Build the project
 RUN npm run build
+# RUN yarn dev
 
-# Stage 4: Production environment setup using Nginx
-FROM nginx:1.21-alpine as production
 
-# Copy built files from the production-build stage to the Nginx serve directory
-COPY --from=production-build /app/dist /usr/share/nginx/html
-
-# Expose port 80 for the Nginx server
+FROM nginx:alpine as production-build
+COPY nginx.conf /etc/nginx/nginx.conf
+## Remove default nginx index page
+RUN rm -rf /usr/share/nginx/html/*
+# Copy from the stage 1
+COPY --from=builder /dist /usr/share/nginx/html
 EXPOSE 80
-
-# Set Nginx to run in the foreground
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
