@@ -4,6 +4,7 @@
   <v-btn v-if="!isLoggedIn" style="width:100px;height:30px;" to="/signin" variant="outlined">Sign in</v-btn>
   <v-btn @click="signOut" style="width:100px;height:30px;" variant="outlined">Log out</v-btn>
   <v-btn style="width:200px;height:30px;font-size:15px;" to="/hatespeech" variant="outlined">Continue as a guest</v-btn>
+  <v-btn @click="getGreeting()">Greeting</v-btn>
 
   <!-- <div id="output">{{ outputMessage }}</div> -->
 
@@ -26,6 +27,18 @@ const analysisResult = ref('')
 // const outputMessage = ref('')
 const isLoggedIn = ref(false)
 const router = useRouter()
+const greeting = ref("")
+
+async function getGreeting() {
+  try {
+    const response = await axios.get("http://localhost:8000/api/show_greeting")
+    greeting.value = response.data.greeting
+    console.log(response.data)
+  } catch (error) {
+    console.error("Failed to fetch greeting:", error);
+    console.log(error)
+  }
+}
 
 
 // firebase intialization code here
