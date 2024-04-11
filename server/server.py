@@ -4,6 +4,7 @@ import logging
 from dotenv import load_dotenv
 import os
 import openai
+import requests
 
 # Load environment variables
 load_dotenv()
@@ -20,6 +21,20 @@ client = openai.Client(api_key=open_api_key)
 @app.route('/api/data', methods=['GET'])
 def get_data():
     return jsonify({"message": "This is the data from Flask."})
+
+# dummy function
+def fetch_greeting():
+    response = requests.get("http://openai_backend:6000/api/greeting")
+    if response.status_code == 200:
+        data = response.json()
+        return data["greeting"]
+    else:
+        return "Failed to fetch greeting"
+
+@app.route("/api/show_greeting", methods=["GET"])
+def show_greeting():
+    greeting = fetch_greeting()
+    return jsonify({"server_greeting": greeting})
 
 @app.route('/api/comments', methods=['GET'])
 def get_comments():

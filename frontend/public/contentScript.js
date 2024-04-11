@@ -34,7 +34,6 @@ const observerCallback = (entries) => {
     chrome.runtime.sendMessage({ action: "updateComments", comments: latestComments.map(comment => comment.innerText )})
     
 }
-  
 
 const observerOptions = {
     root: null,
