@@ -14,6 +14,17 @@ open_api_key2 = os.getenv('OPEN_API_KEY')
 
 client = OpenAI(api_key=open_api_key2)
 
+# @app.route("/api/greeting", methods=["GET"])
+# def test_function():
+#   geeting = "hello"
+#   return geeting
+
+# this is just a dummy function to check cross container communication
+@app.route("/api/greeting", methods=["GET"])
+def get_greeting():
+  greeting = "hello"
+  return jsonify({"greeting": greeting})
+
 
 
 def analyze_hate_speech(text):
