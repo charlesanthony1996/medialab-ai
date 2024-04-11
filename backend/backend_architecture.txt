@@ -1,7 +1,0 @@
---> main.py
-    --> server.py
-    --> database.py
-    --> web_scraper_social.py
-    --> llm_backend.py (not used. just a test script)
-    --> llm_filter.py (filter should be seperated)
-    --> web_scraper_social.py (not using the youtube api still)
