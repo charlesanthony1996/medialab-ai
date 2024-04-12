@@ -69,9 +69,9 @@ function getSelectedText() {
 
 // after highlighted the text is sent to the backend to get a response from the openai api
 async function updateDisplayWithSelectedText() {
-  const text = getSelectedText();
-  display.value = text;
-  if (text.trim().length > 0) {
+ const text = getSelectedText();
+ display.value = text;
+ if (text.trim().length > 0) {
     try {
       const response = await axios.post('http://localhost:8000/api/analyze_text', { text: text.trim() })
       console.log("analysis result: ", response.data)
@@ -79,8 +79,9 @@ async function updateDisplayWithSelectedText() {
     } catch (error) {
       console.error("Error sending text for analysis: ", error)
     }
-  }
+ }
 }
+
 
 
 onMounted(() => {
