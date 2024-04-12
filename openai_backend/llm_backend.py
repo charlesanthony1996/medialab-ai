@@ -62,5 +62,19 @@ def analyze():
     print("analysze hate speech function worked")
     return jsonify(result)
 
+@app.route('/api/analyze_hate_speech', methods=['POST'])
+def analyze_hate_speech_endpoint():
+    data = request.json
+    text = data.get('text', '')
+    if not text:
+        return jsonify({"error": "No text provided"}), 400
+
+    analysis_result, error = analyze_hate_speech(text)
+    if error:
+        return jsonify({"error": error}), 500
+
+    return jsonify({"analysis_result": analysis_result})
+
+
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0', port=6000)
