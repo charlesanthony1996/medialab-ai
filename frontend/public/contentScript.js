@@ -6,17 +6,18 @@ const observerCallback = (entries) => {
     entries.forEach(entry => {
         if(entry.isIntersecting) {
             observedComments.add(entry.target)
-            entry.target.style.backgroundColor = 'lightcoral'
+            
+            
 
         } else {
             observedComments.delete(entry.target)
-            entry.target.style.backgroundColor = ''
+            //entry.target.style.backgroundColor = ''
         }
     })
 
     // clearing the comments and only highlighting the latest 5 processed
     observedComments.forEach(comment => {
-        comment.style.backgroundColor = ''
+        //comment.style.backgroundColor = ''
     })
 
 
@@ -28,7 +29,7 @@ const observerCallback = (entries) => {
 
         // add the styling here to the comment
         // comment.highlight.add('highlight')
-        comment.style.backgroundColor = 'lightcoral'
+        //comment.style.backgroundColor = 'lightcoral'
     })
 
     chrome.runtime.sendMessage({ action: "updateComments", comments: latestComments.map(comment => comment.innerText )})
@@ -60,14 +61,22 @@ window.addEventListener('scroll', () => {
 
 const observedCommentsForCopy = new Set();
 
+
 const observerCallbackForCopy = (entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            //entry.target.innerText = "bla"
             sendCommentToServer(entry.target.innerText)
                 .then(result => {
                     entry.target.innerText = result;
+                    console.log('Result:', result); // Log the value of result
                     observedCommentsForCopy.add(result);
+                    if (result !== 'Is not HS') {
+                        entry.target.style.backgroundColor = 'lightcoral';
+                        console.log('Setting background color to lightcoral');
+                    } else {
+                        entry.target.style.backgroundColor = ''; // Reset background color if not meeting condition
+                        console.log('Resetting background color');
+                    }
                 })
                 .catch(error => {
                     console.error('Error sending comment to server:', error);
@@ -75,8 +84,10 @@ const observerCallbackForCopy = (entries) => {
         } else {
             observedCommentsForCopy.delete(entry.target);
         }
-    })
-}
+    });
+};
+
+
 
 const observerOptionsForCopy = {
     root: null,
