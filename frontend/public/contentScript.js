@@ -41,6 +41,10 @@ const observerOptions = {
     threshold: 0.1
 }
 
+
+
+
+
 const observer = new IntersectionObserver(observerCallback, observerOptions)
 
 // assuming comments are initially present otherwise you may need to wait or retry this
@@ -59,9 +63,15 @@ const observedCommentsForCopy = new Set();
 const observerCallbackForCopy = (entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            observedCommentsForCopy.add(entry.target);
-            // Send each comment to the server
-            // sendCommentToServer(entry.target.innerText);
+            //entry.target.innerText = "bla"
+            sendCommentToServer(entry.target.innerText)
+                .then(result => {
+                    entry.target.innerText = result;
+                    observedCommentsForCopy.add(result);
+                })
+                .catch(error => {
+                    console.error('Error sending comment to server:', error);
+                });
         } else {
             observedCommentsForCopy.delete(entry.target);
         }
@@ -83,3 +93,29 @@ window.addEventListener('scroll', () => {
     document.querySelectorAll('.yt-core-attributed-string.yt-core-attributed-string--white-space-pre-wrap')
     .forEach(comment => observerForCopy.observe(comment))
 })
+
+const sendCommentToServer = (commentText) => {
+    return new Promise((resolve, reject) => {
+        fetch('http://localhost:8000/api/process_comments', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ comment: commentText })  // Sending single comment with key 'comment'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json(); // Parse the response JSON
+        })
+        .then(data => {
+            console.log('Comment sent successfully');
+            resolve(data.comment); // Resolve with the comment from the response
+        })
+        .catch(error => {
+            console.error('Error sending comment to server:', error);
+            reject(error);
+        });
+    });
+};

@@ -6,12 +6,14 @@
   <v-btn style="width:200px;height:30px;font-size:15px;" to="/hatespeech" variant="outlined">Continue as a guest</v-btn>
   <v-btn @click="getGreeting()">Greeting</v-btn>
 
-  <!-- <div id="output">{{ outputMessage }}</div> -->
+  <div id="output">{{ outputMessage }}</div> -->
 
   <router-view></router-view>
   <br>
-  <p v-if="analysisResult">{{ analysisResult }}</p>
+  <p v-if="analysisResult">analysisResult: {{ analysisResult }}</p>
 </template>
+
+
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
@@ -69,17 +71,36 @@ function getSelectedText() {
 
 // after highlighted the text is sent to the backend to get a response from the openai api
 async function updateDisplayWithSelectedText() {
- const text = getSelectedText();
- display.value = text;
- if (text.trim().length > 0) {
-    try {
-      const response = await axios.post('http://localhost:8000/api/analyze_text', { text: text.trim() })
-      console.log("analysis result: ", response.data)
-      analysisResult.value = response.data.counterSpeech || response.data.message || ''
-    } catch (error) {
-      console.error("Error sending text for analysis: ", error)
-    }
- }
+
+const text = getSelectedText()
+display.value = text
+
+if (text.trim().length > 0) {
+  axios.post('http://localhost:8000/api/filter', { text: text.trim() })
+    .then((response) => {
+      console.log("filter result: ", response.data)
+      analysisResult.value = response.data.filtered_text
+
+      if (response.data.filtered_text !== 'Is not HS') {
+        
+        // Reuse the existing 'text' variable, no need to get it again
+        
+        axios.post('http://localhost:8000/api/analyze_hate_speech', { text: text.trim() })
+          .then((response) => {
+            console.log("analysis result: ", response.data)
+            analysisResult.value = response.data.counterSpeech || response.data.message || ''
+          })
+          .catch((error) => {
+            console.error("Error sending text for analysis: ", error)
+          })
+        
+        // analysisResult.value = response.data.filtered_text
+      }
+    })
+    .catch((error) => {
+      console.error("Error sending text for filtering: ", error)
+    })
+}
 }
 
 

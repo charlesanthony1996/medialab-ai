@@ -37,6 +37,15 @@ services:
       retries: 3
       start_period: 40s
 
+  filter:
+    build: ./filter
+    ports:
+      - "127.0.0.1:7000:7000"
+    env_file:
+      - ./filter/.env
+    restart: on-failure
+    networks:
+      - backend_network
 
   openai_backend:
     build: ./openai_backend
