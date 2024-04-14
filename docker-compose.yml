@@ -2,19 +2,24 @@ version: '3.8'
 services:
   frontend:
     build: ./frontend
+    container_name: frontend_service
     ports:
-      - "80:80"
+      - "127.0.0.1:80:80"
     restart: on-failure
     depends_on:
       - server
       - openai_backend
     networks:
       - backend_network
+    volumes:
+      - '/dist:/dist'
+
 
   server:
     build: ./server
+    container_name: server_service
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
     volumes:
       - ./server:/app
     env_file:
@@ -35,8 +40,9 @@ services:
 
   openai_backend:
     build: ./openai_backend
+    container_name: openai_backend_service
     ports:
-      - "6000:6000"
+      - "127.0.0.1:6000:6000"
     env_file:
       - ./openai_backend/.env
     environment:
@@ -47,8 +53,9 @@ services:
 
   database:
     build: ./database
+    container_name: database_service
     ports:
-      - "5001:5001"
+      - "127.0.0.1:5001:5001"
 
 
 networks:
