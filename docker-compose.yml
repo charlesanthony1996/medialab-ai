@@ -12,7 +12,7 @@ services:
     networks:
       - backend_network
     volumes:
-      - '/dist:/dist'
+      - './dist:/dist'
 
 
   server:
