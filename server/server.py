@@ -52,15 +52,31 @@ def process_comments():
         comment_text = data.get('comment', '')  # Assuming the key in JSON is 'comment'
         
         # Add a string to the comment text
-        comment_text += " added string here"
+        # comment_text += " added string here"
         
         # Process the comment here
         # For demonstration purposes, let's just echo back the modified comment
         response_comment = comment_text if comment_text else "No comment received"
         #response_comment = "backend boy"
-        return jsonify({'comment': response_comment}), 200
+        
+        # Make a POST request to another route to filter the text
+        filter_response = requests.post('http://filter:7000/api/test', json={'text': response_comment})
+        
+        # Check if the request was successful
+        if filter_response.status_code == 200:
+            response = filter_response.json().get('filtered_text')
+            return jsonify({"comment": response}), 200
+        else:
+            return jsonify({"error": "Failed to filter text"}), 500
+        
     except Exception as e:
+        print("Error during processing comments:", str(e))
         return jsonify({'error': str(e)}), 500
+
+
+        
+
+
 
 # @app.route('/api/analyze_text', methods=['POST'])
 # def analyze_text():
