@@ -45,15 +45,22 @@ def get_default_extension():
     return jsonify({"prompt": "Highlighted"})
 
 
-@app.route('/api/process_comments', methods=['GET'])
+@app.route('/api/process_comments', methods=['POST'])
 def process_comments():
-    comments = request.json.get('comments', [])
-    process_comments = []
-
-    for comment in comments:
-        processed_comments.append(comment)
-    
-    return jsonify({'processed comments: ', processed_comments})
+    try:
+        data = request.get_json()
+        comment_text = data.get('comment', '')  # Assuming the key in JSON is 'comment'
+        
+        # Add a string to the comment text
+        comment_text += " added string here"
+        
+        # Process the comment here
+        # For demonstration purposes, let's just echo back the modified comment
+        response_comment = comment_text if comment_text else "No comment received"
+        #response_comment = "backend boy"
+        return jsonify({'comment': response_comment}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 # @app.route('/api/analyze_text', methods=['POST'])
 # def analyze_text():
@@ -142,7 +149,32 @@ def analyze_text():
         return jsonify({"error": str(e)}), 500
 
 
+# New route to handle text filtering
+@app.route('/api/filter', methods=['POST'])
+def filter_text():
+    try:
+        data = request.json
+        text = data.get('text', '')
 
+        if not text:
+            return jsonify({"error": "No text provided"}), 400
+
+        # Call your TwitterRoberta implementation to generate response
+        print("Text sent to the filter:", text)
+        
+        # Make a POST request to another route to filter the text
+        filter_response = requests.post('http://filter:7000/api/test', json={'text': text})
+        
+        # Check if the request was successful
+        if filter_response.status_code == 200:
+            response = filter_response.json().get('filtered_text')
+            return jsonify({"filtered_text": response})
+        else:
+            return jsonify({"error": "Failed to filter text"}), 500
+
+    except Exception as e:
+        print("Error during text filtering:", str(e))
+        return jsonify({"error": str(e)}), 500
 
 # @app.route('/api/filter', methods=['POST'])
 # def filter_text():

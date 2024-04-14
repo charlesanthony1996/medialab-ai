@@ -27,6 +27,18 @@ def get_greeting():
 
 
 
+
+
+
+@app.route('/analyze', methods=['POST'])
+def analyze():
+    print("before the result")
+    text = request.json['text']
+    result = analyze_hate_speech(text)  # This would be your actual analysis function
+    print("analysze hate speech function worked")
+    return jsonify(result)
+
+@app.route('/api/analyze_hate_speech', methods=['POST'])
 def analyze_hate_speech(text):
   system_message = """You are an AI trained to detect hate speech and respond with counter-speech. 
                         If no hate speech is detected,
@@ -54,15 +66,7 @@ def analyze_hate_speech(text):
     return None, str(e)
 
 
-@app.route('/analyze', methods=['POST'])
-def analyze():
-    print("before the result")
-    text = request.json['text']
-    result = analyze_hate_speech(text)  # This would be your actual analysis function
-    print("analysze hate speech function worked")
-    return jsonify(result)
-
-@app.route('/api/analyze_hate_speech', methods=['POST'])
+"""
 def analyze_hate_speech_endpoint():
     data = request.json
     text = data.get('text', '')
@@ -74,7 +78,7 @@ def analyze_hate_speech_endpoint():
         return jsonify({"error": error}), 500
 
     return jsonify({"analysis_result": analysis_result})
-
+"""
 
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0', port=6000)

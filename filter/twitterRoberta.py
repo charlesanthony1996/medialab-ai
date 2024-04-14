@@ -1,19 +1,50 @@
-def generate_response(input_text):
-    
-    return input_text
-
-# If doing the docker for it, delete the upper generate_response function and remove
-# The python multiline comment from below
-
-"""
-# Maybe not needed here: from flask import Flask, request, jsonify
+from flask import Flask, jsonify, request
+from flask_cors import CORS
 import numpy as np
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 from scipy.special import softmax
 
+# Setup Flask application
+app = Flask(__name__)
+app.debug = True
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+
+
 # Load the model and tokenizer directly
 tokenizer = AutoTokenizer.from_pretrained("cardiffnlp/twitter-roberta-base-sentiment-latest")
 loaded_model = AutoModelForSequenceClassification.from_pretrained("cardiffnlp/twitter-roberta-base-sentiment-latest")
+
+
+"""
+def generate_response(input_text):
+    print(input_text)
+    # Here you would perform your text filtering logic
+    # For now, let's just return the input text as it is
+    return jsonify({"filtered_text": input_text})
+"""
+
+
+# Route to handle text filtering
+@app.route('/api/test', methods=['POST'])
+def filter_text():
+    try:
+        data = request.json
+        text = data.get('text', '')
+
+        if not text:
+            return jsonify({"error": "No text provided"}), 400
+
+        # Call the generate_response function to filter the text
+        response = generate_response(text)
+        return response
+
+    except Exception as e:
+        print("Error during text filtering:", str(e))
+        return jsonify({"error": str(e)}), 500
+
+
+# Real part uncommented:
+
 
 # Define preprocess function
 def preprocess(text):
@@ -55,14 +86,20 @@ def generate_response(input_text):
     #data = request.json
     #highlighted_text = data.get('text')
     
-    highlighted_text = input
+    highlighted_text = input_text
+    
+    #highlighted_text = "For starters bend over the one in pink and kick that ass and pussy to get a taste until she's begging for a dick inside her."
 
     # Process the text
     filtered, text, score = process_text(highlighted_text)
     if filtered:
         # Return the analyzed text and its negativity score
-        return text
+        return jsonify({"filtered_text": text})
     else:
-        return 'Is not HS'
+        return jsonify({"filtered_text": 'Is not HS'})
     
-"""
+
+
+# If running the Flask app directly
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=7000)
