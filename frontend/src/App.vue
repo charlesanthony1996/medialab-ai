@@ -79,7 +79,7 @@ if (text.trim().length > 0) {
   axios.post('http://localhost:8000/api/filter', { text: text.trim() })
     .then((response) => {
       console.log("filter result: ", response.data.filtered_text)
-      
+      analysisResult.value = response.data.filtered_text
       if (response.data.filtered_text !== 'Is not HS') {
         
         // smt but do not do another axios.post here
