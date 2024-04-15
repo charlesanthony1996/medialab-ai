@@ -25,60 +25,30 @@ def get_greeting():
   greeting = "hello"
   return jsonify({"greeting": greeting})
 
-
-
-
-
-
-@app.route('/analyze', methods=['POST'])
-def analyze():
-    print("before the result")
-    text = request.json['text']
-    result = analyze_hate_speech(text)  # This would be your actual analysis function
-    print("analysze hate speech function worked")
-    return jsonify(result)
-
 @app.route('/api/analyze_hate_speech', methods=['POST'])
-def analyze_hate_speech(text):
-  system_message = """You are an AI trained to detect hate speech and respond with counter-speech. 
+def analyze_hate_speech():
+    system_message = """You are an AI trained to detect hate speech and respond with counter-speech. 
                         If no hate speech is detected,
                         respond with 'No hate speech detected.'"""
 
+    try:
+        data = request.json
+        user_message = data.get('text', '')
 
-  user_message = text
-  try:
-    response = client.chat.completions.create(
-      model="gpt-3.5-turbo",
-      messages=[
-        {"role": "system", "content": system_message},
-        {"role": "user", "content": user_message}
-      ],
-      # stream=True
-    )
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": system_message},
+                {"role": "user", "content": user_message}
+            ],
+            # stream=True
+        )
 
-    analysis_result = response.choices[0].message.content.strip()
-    print("analysis result: ", analysis_result)
-    # response endpoint changed
-    # refer to -> https://stackoverflow.com/questions/77444332/openai-python-package-error-chatcompletion-object-is-not-subscriptable
-    # response_message = response.choices[0].message.content
-    return analysis_result, None
-  except Exception as e:
-    return None, str(e)
-
-
-"""
-def analyze_hate_speech_endpoint():
-    data = request.json
-    text = data.get('text', '')
-    if not text:
-        return jsonify({"error": "No text provided"}), 400
-
-    analysis_result, error = analyze_hate_speech(text)
-    if error:
-        return jsonify({"error": error}), 500
-
-    return jsonify({"analysis_result": analysis_result})
-"""
+        analysis_result = response.choices[0].message.content.strip()
+        print("analysis result: ", analysis_result)
+        return jsonify({"analysis_result": analysis_result}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True,host='0.0.0.0', port=6000)
