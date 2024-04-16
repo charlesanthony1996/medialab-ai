@@ -6,11 +6,13 @@
   <v-btn style="width:200px;height:30px;font-size:15px;" to="/hatespeech" variant="outlined">Continue as a guest</v-btn>
   <v-btn @click="getGreeting()">Greeting</v-btn>
 
-  <div id="output">{{ outputMessage }}</div> -->
+  <div id="output">{{ outputMessage }}</div>
 
   <router-view></router-view>
   <br>
-  <p v-if="analysisResult">analysisResult: {{ analysisResult }}</p>
+  <p v-if="analysisResult == 'No hate speech detected.'">{{ analysisResult }}</p>
+
+  <PopupCard v-if="analysisResult !== 'No hate speech detected.'" :analysisResult="analysisResult" @close="closeDialog" />
 </template>
 
 
@@ -22,7 +24,7 @@ import { useRouter } from 'vue-router'
 import firebase from 'firebase/compat/app'
 import "firebase/compat/firestore"
 import "firebase/compat/auth"
-
+import PopupCard from './components/popup.vue';
 
 const display = ref('')
 const analysisResult = ref('')
@@ -30,6 +32,10 @@ const analysisResult = ref('')
 const isLoggedIn = ref(false)
 const router = useRouter()
 const greeting = ref("")
+
+const closeDialog = () => {
+  analysisResult.value = '';
+}
 
 async function getGreeting() {
   try {
@@ -80,7 +86,7 @@ if (text.trim().length > 0) {
     .then((response) => {
       console.log("filter result: ", response.data.filtered_text)
       analysisResult.value = response.data.filtered_text
-      if (response.data.filtered_text !== 'Is not HS') {
+      if (response.data.filtered_text !== 'No hate speech detected.') {
         
         // smt but do not do another axios.post here
 
@@ -104,6 +110,8 @@ onUnmounted(() => {
   document.removeEventListener('mouseup', updateDisplayWithSelectedText)
   document.removeEventListener('keyup', updateDisplayWithSelectedText)
 })
+
+document.body.appendChild(document.createElement('div')).setAttribute('id', 'dialog-container');
 
 // function fetchData(): void {
 //   const response: { message: string } = { message: 'This is the response message' }; 
