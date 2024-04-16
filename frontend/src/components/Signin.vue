@@ -1,11 +1,32 @@
 <template>
-    <br>
-    <v-text>Email</v-text>
-    <v-text-field type="text" label="email" v-model="email"></v-text-field>
-    <v-text>Password</v-text>
-    <v-text-field type="password" label="password" v-model="password"></v-text-field>
+   
+   <br>
+    <!--<v-text>Email</v-text>-->
+    <v-text-field
+        type="text" 
+        label="E-mail" 
+        v-model="email"
+        variant="outlined"
+    ></v-text-field>
+
+    <!--<v-text>Password</v-text>-->
+    <v-text-field 
+        
+        :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+        :type="visible ? 'text' : 'password'"
+        label="Password"
+        variant="outlined"
+        v-model="password"
+        @click:append-inner=" visible = !visible"
+    ></v-text-field>
+
     <p v-if="errMsg">{{ errMsg }}</p>
-    <v-btn variant="outlined" @click="signIn">Submit</v-btn>
+    <v-btn 
+        variant="outlined" 
+        @click="signIn"
+    >
+        Submit
+    </v-btn>
 </template>
 
 
@@ -46,6 +67,16 @@ const signIn = () => {
     })
 }
 
+const visible = ref(false)
+
+</script>
+
+<script>
+export default {
+    data: () => ({
+        visible:false,
+    })
+}
 
 
 </script>
