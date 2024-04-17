@@ -19,7 +19,7 @@ RUN pip install --no-cache-dir torch
 RUN pip install --no-cache-dir transformers
 RUN pip install --no-cache-dir streamlit
 RUN pip install --no-cache-dir Pillow
-RUN pip install --no-cache-dir jax[cpu]
+#RUN pip install --no-cache-dir jax[cpu]
 RUN pip install --no-cache-dir flax
 RUN pip install --no-cache-dir huggingface_hub
 RUN pip install --no-cache-dir googletrans==4.0.0-rc1
