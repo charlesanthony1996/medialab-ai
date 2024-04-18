@@ -32,6 +32,7 @@ const analysisResult = ref('')
 const isLoggedIn = ref(false)
 const router = useRouter()
 const greeting = ref("")
+console.log("hello")
 
 const closeDialog = () => {
   analysisResult.value = '';

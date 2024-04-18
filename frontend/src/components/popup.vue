@@ -14,31 +14,29 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    analysisResult: String
-  },
-  methods: {
-    closeDialog() {
-      this.$emit('close');
-    },
-    copyToClipboard() {
-      // Create a temporary textarea element
-      const textarea = document.createElement('textarea');
-      // Set its value to the analysisResult
-      textarea.value = this.analysisResult;
-      // Append it to the document body
-      document.body.appendChild(textarea);
-      // Select its content
-      textarea.select();
-      // Copy the selected content to clipboard
-      document.execCommand('copy');
-      // Remove the temporary textarea element
-      document.body.removeChild(textarea);
-      }
-  }
-}
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue';
+
+// Props
+const props = defineProps({
+  analysisResult: String
+});
+
+// Methods
+const closeDialog = () => {
+  // Emitting an event upwards to parent component
+  emit('close');
+};
+
+const copyToClipboard = () => {
+  const textarea = document.createElement('textarea');
+  textarea.value = props.analysisResult;
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand('copy');
+  document.body.removeChild(textarea);
+};
+
 </script>
 
 <style scoped>
