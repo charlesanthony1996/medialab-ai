@@ -42,7 +42,7 @@ def filter_text():
         return jsonify({"error": str(e)}), 500
 
 
-# Real part uncommented:
+# test
 
 
 # Define preprocess function
