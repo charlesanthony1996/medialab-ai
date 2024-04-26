@@ -1,0 +1,21 @@
+{
+    "models": {
+        "BERT": {
+            "model_path": "bert-base-uncased",
+            "threshold": 0.3,
+            "preprocess": {
+                "lower_case": true,
+                "remove_punctuation": true
+            }
+        },
+        "RoBERTa": {
+            "model_path": "cardiffnlp/twitter-roberta-base-sentiment-latest",
+            "threshold": 0.35,
+            "preprocess": {
+                "lower_case": false,
+                "remove_punctuation": false
+            }
+        }
+    },
+    "active_model": "RoBERTa"
+}
