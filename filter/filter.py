@@ -6,15 +6,16 @@ import json
 import tensorflow as tf
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from scipy.special import softmax
 
 class TextProcessor:
     def __init__(self, config_path):
-        with open('config.path', 'r') as config_file:
+        with open("config.json", 'r') as config_file:
             config = json.load(config_file)
 
         self.active_config = config["models"][config["active_model"]]
         self.model = TFAutoModelForSequenceClassification.from_pretrained(self.active_config["model_path"])
-        self.tokenizer = AutoTokenizer.from_pretrained(active_config["model_path"])
+        self.tokenizer = AutoTokenizer.from_pretrained(self.active_config["model_path"])
         self.threshold = self.active_config["threshold"]
 
 
@@ -23,7 +24,7 @@ class TextProcessor:
             text = text.lower()
 
         if self.active_config["preprocess"]["remove_punctuation"]:
-            text = ''.join(char for char in text.isalnum() or char.isspace())
+            text = ''.join(char for char in text if char.isalnum() or char.isspace())
         return text
 
 
@@ -39,10 +40,35 @@ class TextProcessor:
 
 # end of class
 app = Flask(__name__)
-cors = CORS(app, resources={r"/api/*" : { "origins: "*"" }})
+cors = CORS(app, resources={r"/api/*" : { "origins": "*" }})
 processor = TextProcessor('config.json')
 
+def direct_test(sentence):
+    filtered, processed_text , score = processor.process_text(sentence)
+    print(f"Sentence: '{sentence}'\n Filtered: {filtered}\nProcessed Text: {processed_text}\nNegativity Score: {score}\n")
 
+@app.route("/api/test", methods=["POST"])
+def filter_text():
+    try:
+        data = request.json
+        text = data.get("text", '')
 
+        if not text:
+            return jsonify({"error": "No text provided"}), 400
+        
+        fitered, processed_text , score = processor.process_text(text)
+        if filtered:
+            return jsonify({"filtered_text": processed_text, "negativity_score": score})
+        else:
+            return jsonify({"filtered_text": "Text does not exceed the negativity threshold", "negativity_score": score})
+    
+    except Exception as e:
+        return jsonify({"error": str((e))}), 500
+
+        
+
+if __name__ == "__main__":
+    direct_test("you are a very horrible person")
+    app.run(debug=True, host='0.0.0.0', port = 7001)
 
 

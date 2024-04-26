@@ -15,7 +15,15 @@
                 "lower_case": false,
                 "remove_punctuation": false
             }
+        },
+        "RobertaBase": {
+            "model_path": "roberta-base",
+            "threshold": 0.4,
+            "preprocess": {
+                "lower_case": true,
+                "remove_punctuation": true
+            }
         }
     },
-    "active_model": "RoBERTa"
+    "active_model": "RobertaBase"
 }
