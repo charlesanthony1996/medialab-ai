@@ -11,12 +11,16 @@ from scipy.special import softmax
 class TextProcessor:
     def __init__(self, config_path):
         with open("config.json", 'r') as config_file:
-            config = json.load(config_file)
+            self.config = json.load(config_file)
 
-        self.active_config = config["models"][config["active_model"]]
+        self.active_config = self.config["models"][self.config["active_model"]]
         self.model = TFAutoModelForSequenceClassification.from_pretrained(self.active_config["model_path"])
         self.tokenizer = AutoTokenizer.from_pretrained(self.active_config["model_path"])
         self.threshold = self.active_config["threshold"]
+
+
+    def get_current_filter(self):
+        return self.config["active_model"]
 
 
     def preprocess(self, text):
@@ -45,7 +49,7 @@ processor = TextProcessor('config.json')
 
 def direct_test(sentence):
     filtered, processed_text , score = processor.process_text(sentence)
-    print(f"Sentence: '{sentence}'\n Filtered: {filtered}\nProcessed Text: {processed_text}\nNegativity Score: {score}\n")
+    print(f"Sentence: '{sentence}'\nFiltered: {filtered}\nProcessed Text: {processed_text}\nNegativity Score: {score}\n")
 
 @app.route("/api/test", methods=["POST"])
 def filter_text():
@@ -68,6 +72,9 @@ def filter_text():
         
 
 if __name__ == "__main__":
+    # get the current filter your running on json
+    current_filter = processor.get_current_filter()
+    print(f"Currently using filter: {current_filter}")
     direct_test("you are a very horrible person")
     app.run(debug=True, host='0.0.0.0', port = 7001)
 
