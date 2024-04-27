@@ -69,6 +69,7 @@ const observerCallbackForCopy = (entries) => {
                     // Making it display here 'Is not HS'. Its commented out just to highlight atm
                     // Good for testing
                     // entry.target.innerText = result;
+                    console.log(`Server result: ${result}`);
                     console.log('Result:', result); // Log the value of result
                     observedCommentsForCopy.add(result);
                     if (result !== 'Is not HS') {
