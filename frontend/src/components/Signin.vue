@@ -26,6 +26,8 @@ const email = ref("")
 const password = ref("")
 const router = useRouter()
 const errMsg = ref("")
+const visible = ref(false)
+
 
 
 const signIn = () => {
@@ -54,7 +56,16 @@ const signIn = () => {
         })
 }
 
-const visible = ref(false)
+function setCookie(name, value, days) {
+    var expires = ""
+    if (days) {
+        var date = new Date()
+        date.Date(date.getTime() + (days * 24 * 60 * 60 * 1000))
+        expires = "; expires=" + date.toUTCString()
+    }
+
+    document.cookie = name + "=" + (value || "") + expires + "; path=/"
+}
 
 </script>
 
