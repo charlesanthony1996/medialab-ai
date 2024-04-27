@@ -24,7 +24,7 @@ import { useRouter } from 'vue-router'
 import firebase from 'firebase/compat/app'
 import "firebase/compat/firestore"
 import "firebase/compat/auth"
-import PopupCard from './components/popup.vue';
+import PopupCard from './components/Popup.vue';
 
 const display = ref('')
 const analysisResult = ref('')

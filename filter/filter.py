@@ -49,7 +49,7 @@ processor = TextProcessor('config.json')
 
 def direct_test(sentence):
     filtered, processed_text , score = processor.process_text(sentence)
-    print(f"Sentence: '{sentence}'\nFiltered: {filtered}\nProcessed Text: {processed_text}\nNegativity Score: {score}\n")
+    print(f"Sentence: '{sentence}'\nFiltered: {filtered}\nNegativity Score: {score}\n")
 
 @app.route("/api/test", methods=["POST"])
 def filter_text():

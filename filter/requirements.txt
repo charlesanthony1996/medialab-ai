@@ -1,2 +1,14 @@
 Flask
 Flask-Cors
+numpy
+streamlit==0.84.1
+Pillow
+torch
+torchvision
+transformers
+huggingface_hub
+googletrans==4.0.0-rc1
+protobuf==3.20
+scipy.special
+sentencepiece
+tensorflow

@@ -8,10 +8,10 @@ app = Flask(__name__)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 # print("hello from llm_backend")
 load_dotenv()
+print("test commit")
 
 # Use environment variables
 open_api_key2 = os.getenv('OPEN_API_KEY')
-
 client = OpenAI(api_key=open_api_key2)
 
 # @app.route("/api/greeting", methods=["GET"])
@@ -27,7 +27,13 @@ def get_greeting():
 
 @app.route('/api/analyze_hate_speech', methods=['POST'])
 def analyze_hate_speech():
-    system_message = """You are an AI trained to detect hate speech and respond with counter-speech. 
+    system_message = """You are an AI trained to detect hate speech or any kind of offensive language
+                        and respond with counter-speech. 
+                        If no hate speech is detected,
+                        respond with 'No hate speech detected.'"""
+    
+    system_message2 = """You are a humorous AI trained to detect hate speech or any kind of offensive language
+                        and respond with counter-speech.
                         If no hate speech is detected,
                         respond with 'No hate speech detected.'"""
 
