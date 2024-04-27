@@ -1,5 +1,5 @@
 {
-    "name": "Hate Speech Application Extension",
+    "name": "Hate Speech App (Experimental)",
     "version": "1.0.0",
     "description": "This is an extension to detect and counter hate speech for a social media platform",
     "manifest_version": 3,
