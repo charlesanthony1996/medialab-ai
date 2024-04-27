@@ -7,7 +7,6 @@ const observerCallback = (entries) => {
         if(entry.isIntersecting) {
             observedComments.add(entry.target)
             
-            
 
         } else {
             observedComments.delete(entry.target)
@@ -69,14 +68,14 @@ const observerCallbackForCopy = (entries) => {
                 .then(result => {
                     // Making it display here 'Is not HS'. Its commented out just to highlight atm
                     // Good for testing
-                    //entry.target.innerText = result;
+                    // entry.target.innerText = result;
                     console.log('Result:', result); // Log the value of result
                     observedCommentsForCopy.add(result);
                     if (result !== 'Is not HS') {
                         entry.target.style.backgroundColor = 'lightcoral';
                         console.log('Setting background color to lightcoral');
                     } else {
-                        entry.target.style.backgroundColor = ''; // Reset background color if not meeting condition
+                        entry.target.style.backgroundColor = 'darkolivegreen'
                         console.log('Resetting background color');
                     }
                 })
@@ -132,3 +131,22 @@ const sendCommentToServer = (commentText) => {
         });
     });
 };
+
+
+document.addEventListener('mouseup', function() {
+    const selection = window.getSelection();
+    const selectedText = selection.toString().trim();
+    if (selectedText.length > 0) {
+        fetch('http://localhost:8000/api/filter', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: selectedText })
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert("Analysis Result: " + data.filtered_text);
+            selection.removeAllRanges();  // Unhighlight the text
+        })
+        .catch(error => console.error('Error:', error));
+    }
+});

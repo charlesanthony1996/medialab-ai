@@ -44,4 +44,4 @@ EXPOSE 7001
 # ENV MODEL_NAME=gpt-3.5-turbo
 
 # Run filter.py when the container launches
-CMD ["python", "twitterRoberta.py"]
+CMD ["python", "filter.py"]

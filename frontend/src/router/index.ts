@@ -4,6 +4,7 @@ import HateSpeech from '../components/HateSpeech.vue'
 import Signin from '../components/Signin.vue'
 import Signup from '../components/Signup.vue'
 import firebase from "firebase/compat/app"
+import UserSettings from "../components/UserSettings.vue"
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -32,6 +33,12 @@ const routes: Array<RouteRecordRaw> = [
     meta: { guestOnly: true}
 
   },
+  {
+    path: '/usersettings',
+    name: 'usersettings',
+    component: UserSettings,
+    meta: { guestOnly: true}
+  }
 //   { path: '/:pathMatch(.*)*', redirect: '/' },
 ]
 

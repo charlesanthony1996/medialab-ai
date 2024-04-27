@@ -64,7 +64,7 @@ def filter_text():
         if filtered:
             return jsonify({"filtered_text": processed_text, "negativity_score": score})
         else:
-            return jsonify({"filtered_text": "Text does not exceed the negativity threshold", "negativity_score": score})
+            return jsonify({"filtered_text": "Is not HS", "negativity_score": score})
     
     except Exception as e:
         return jsonify({"error": str((e))}), 500

@@ -101,16 +101,16 @@ if (text.trim().length > 0) {
 
 
 
-onMounted(() => {
-  document.addEventListener('mouseup', updateDisplayWithSelectedText)
-  document.addEventListener('keyup', updateDisplayWithSelectedText)
+// onMounted(() => {
+//   document.addEventListener('mouseup', updateDisplayWithSelectedText)
+//   document.addEventListener('keyup', updateDisplayWithSelectedText)
   
-})
+// })
 
-onUnmounted(() => {
-  document.removeEventListener('mouseup', updateDisplayWithSelectedText)
-  document.removeEventListener('keyup', updateDisplayWithSelectedText)
-})
+// onUnmounted(() => {
+//   document.removeEventListener('mouseup', updateDisplayWithSelectedText)
+//   document.removeEventListener('keyup', updateDisplayWithSelectedText)
+// })
 
 document.body.appendChild(document.createElement('div')).setAttribute('id', 'dialog-container');
 
