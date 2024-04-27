@@ -8,6 +8,11 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from scipy.special import softmax
 
+# some token idk -> read about it
+import os
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
+
 class TextProcessor:
     def __init__(self, config_path):
         with open("config.json", 'r') as config_file:
@@ -44,6 +49,7 @@ class TextProcessor:
 
 # end of class
 app = Flask(__name__)
+app.debug = True
 cors = CORS(app, resources={r"/api/*" : { "origins": "*" }})
 processor = TextProcessor('config.json')
 
@@ -60,7 +66,8 @@ def filter_text():
         if not text:
             return jsonify({"error": "No text provided"}), 400
         
-        fitered, processed_text , score = processor.process_text(text)
+        filtered, processed_text , score = processor.process_text(text)
+        score = float(score)
         if filtered:
             return jsonify({"filtered_text": processed_text, "negativity_score": score})
         else:
@@ -68,6 +75,7 @@ def filter_text():
     
     except Exception as e:
         return jsonify({"error": str((e))}), 500
+
 
         
 
