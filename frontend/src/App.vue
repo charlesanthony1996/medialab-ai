@@ -25,6 +25,7 @@ import firebase from 'firebase/compat/app'
 import "firebase/compat/firestore"
 import "firebase/compat/auth"
 import PopupCard from './components/Popup.vue';
+import Cookies from 'js-cookie'
 
 const display = ref('')
 const analysisResult = ref('')
@@ -61,6 +62,7 @@ firebase.auth().onAuthStateChanged(function (user) {
 
 // sign out function for firebase
 const signOut = () => {
+  Cookies.remove('myCookie')
   firebase.auth().signOut()
   router.push('/')
 }

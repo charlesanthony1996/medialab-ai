@@ -5,6 +5,7 @@ import Signin from '../components/Signin.vue'
 import Signup from '../components/Signup.vue'
 import firebase from "firebase/compat/app"
 import UserSettings from "../components/UserSettings.vue"
+import Cookies from 'js-cookie'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -48,19 +49,23 @@ const router = createRouter({
 })
 
 // auth setup
-router.beforeEach((to, _from, next) => {
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-  const guestOnly = to.matched.some(record => record.meta.guestOnly)
-  const isAuthenticated = firebase.auth().currentUser
+router.beforeEach(async (to, _from, next) => {
+  await firebase.auth().onAuthStateChanged(user => {
+    const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+    const guestOnly = to.matched.some(record => record.meta.guestOnly);
+    const isAuthenticated = user != null;
+    const hasCookie = Cookies.get('myCookie');
 
-  if(requiresAuth && !isAuthenticated) {
-    next('/signin')
-  } else if (isAuthenticated && guestOnly){
-    next('/hatespeech')
-  } else {
-    next()
-  }
-})
+    if (requiresAuth && !isAuthenticated) {
+      next('/signin');
+    } else if (guestOnly && isAuthenticated) {
+      next('/hatespeech');
+    } else {
+      next();
+    }
+  });
+});
+
 
 // router.beforeEach((to, from, next) => {
 // // 

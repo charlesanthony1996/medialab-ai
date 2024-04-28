@@ -21,6 +21,7 @@ import { ref } from 'vue'
 import firebase from "firebase/compat/app"
 import { useRouter } from 'vue-router'
 import '@mdi/font/css/materialdesignicons.min.css'
+import Cookies from 'js-cookie'
 
 const email = ref("")
 const password = ref("")
@@ -36,6 +37,7 @@ const signIn = () => {
         .signInWithEmailAndPassword(email.value, password.value)
         .then((data) => {
             console.log("sucessfully logged in")
+            Cookies.set("myCookie", 'loggedIn', {expires: 7})
             router.push("/hatespeech")
         })
         .catch(error => {
