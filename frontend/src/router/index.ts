@@ -60,11 +60,13 @@ router.beforeEach(async (to, _from, next) => {
       next('/signin');
     } else if (guestOnly && isAuthenticated) {
       next('/hatespeech');
+    } else if (isAuthenticated && hasCookie) {
+      next('/hatespeech');
     } else {
-      next();
+      next()
     }
-  });
-});
+  })
+})
 
 
 // router.beforeEach((to, from, next) => {
