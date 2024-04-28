@@ -6,6 +6,8 @@ const observerCallback = (entries) => {
     entries.forEach(entry => {
         if(entry.isIntersecting) {
             observedComments.add(entry.target)
+            // button addition on every comment
+            appendButtonToComment(entry.target)
             
 
         } else {
@@ -58,6 +60,19 @@ window.addEventListener('scroll', () => {
     .forEach(comment => observer.observe(comment))
 })
 
+function appendButtonToComment(commentElement) {
+    const button = document.createElement("button")
+    button.textContent = 'Open Extension'
+    button.style.marginLeft = '10px'
+    button.className = 'open-extension-button'
+
+    button.onclick = function() {
+        chrome.runtime.sendMessage({ action: "openPopup"})
+    }
+
+    commentElement.appendChild(button)
+}
+
 const observedCommentsForCopy = new Set();
 
 
@@ -66,6 +81,8 @@ const observerCallbackForCopy = (entries) => {
         if (entry.isIntersecting) {
             sendCommentToServer(entry.target.innerText)
                 .then(result => {
+                    // button addition here as well
+                    appendButtonToComment(entry.target)
                     // Making it display here 'Is not HS'. Its commented out just to highlight atm
                     // Good for testing
                     // entry.target.innerText = result;
@@ -100,11 +117,17 @@ const observerOptionsForCopy = {
 const observerForCopy = new IntersectionObserver(observerCallbackForCopy, observerOptionsForCopy)
 
 document.querySelectorAll('.yt-core-attributed-string.yt-core-attributed-string--white-space-pre-wrap')
-    .forEach(comment => observerForCopy.observe(comment))
+    .forEach(comment => {
+        observerForCopy.observe(comment)
+        // appendButtonToComment(comment)
+    })
 
 window.addEventListener('scroll', () => {
     document.querySelectorAll('.yt-core-attributed-string.yt-core-attributed-string--white-space-pre-wrap')
-    .forEach(comment => observerForCopy.observe(comment))
+    .forEach(comment => {
+        observerForCopy.observe(comment)
+        // appendButtonToComment(comment)
+})
 })
 
 const sendCommentToServer = (commentText) => {
