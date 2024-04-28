@@ -8,9 +8,9 @@
                 "remove_punctuation": true
             }
         },
-        "RoBERTa": {
+        "TwitterRoberta": {
             "model_path": "cardiffnlp/twitter-roberta-base-sentiment-latest",
-            "threshold": 0.35,
+            "threshold": 0.4,
             "preprocess": {
                 "lower_case": false,
                 "remove_punctuation": false
@@ -18,7 +18,7 @@
         },
         "RobertaBase": {
             "model_path": "roberta-base",
-            "threshold": 0.4,
+            "threshold": 0.3,
             "preprocess": {
                 "lower_case": true,
                 "remove_punctuation": true
@@ -26,12 +26,28 @@
         },
         "XLNet": {
             "model_path": "xlnet-base-cased",
-            "threshold": 0.4,
+            "threshold": 0.3,
             "preprocess": {
                 "lower_case": true,
                 "remove_punctuation": true
             }
+        },
+        "TwitterRobertaHate": {
+            "model_path": "cardiffnlp/twitter-roberta-base-hate-latest",
+            "threshold": 0.7,
+            "preprocess": {
+                "lower_case": false,
+                "remove_punctuation": false
+            }
+        },
+        "DistilBertBaseFinetuned": {
+            "model_path": "distilbert-base-uncased-finetuned-sst-2-english",
+            "threshold": 0.4,
+            "preprocess": {
+                "lower_case": false,
+                "remove_punctuation": false
+            }
         }
     },
-    "active_model": "XLNet"
+    "active_model": "DistilBertBaseFinetuned"
 }
