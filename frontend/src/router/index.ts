@@ -48,25 +48,28 @@ const router = createRouter({
   routes,
 })
 
-// auth setup
+// auth setup and a promise to wait till the browser detects for the cookie
 router.beforeEach(async (to, _from, next) => {
-  await firebase.auth().onAuthStateChanged(user => {
-    const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-    const guestOnly = to.matched.some(record => record.meta.guestOnly);
-    const isAuthenticated = user != null;
-    const hasCookie = Cookies.get('myCookie');
+  const user = await new Promise(resolve => firebase.auth().onAuthStateChanged(resolve))
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+  const guestOnly = to.matched.some(record => record.meta.guestOnly)
+  const isAuthenticated = user != null
+  const hasCookie = Cookies.get('myCookie')
 
-    if (requiresAuth && !isAuthenticated) {
-      next('/signin');
-    } else if (guestOnly && isAuthenticated) {
-      next('/hatespeech');
-    } else if (isAuthenticated && hasCookie) {
-      next('/hatespeech');
-    } else {
-      next()
-    }
-  })
+
+  if (to.path === '/hatespeech' && isAuthenticated && hasCookie) {
+    return next()
+  }
+
+  if (requiresAuth && !isAuthenticated && !hasCookie) {
+    return next('/signin')
+  } else if (guestOnly && isAuthenticated) {
+    return next('/hatespeech')
+  } else {
+    next()
+  }
 })
+
 
 
 // router.beforeEach((to, from, next) => {
