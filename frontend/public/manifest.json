@@ -5,6 +5,7 @@
     "manifest_version": 3,
     "author": "Charles Anthony",
     "action": {
+        "default_icon": "./assets/shield16.png",
         "default_popup": "index.html",
         "default_title": "Hate Speech Application Extension"
     },
@@ -24,5 +25,10 @@
     },
     "background": {
         "service_worker": "background.js"
+    },
+    "icons": {
+        "16": "./assets/shield16.png",
+        "48": "./assets/shield48.png",
+        "128": "./assets/shield128.png"
     }
 }
