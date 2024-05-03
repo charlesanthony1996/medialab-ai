@@ -20,21 +20,21 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     }
 })
 
-chrome.contextMenus.create({
-  id: "myContextMenu",
-  title: "HS not detected? Mark as hatespeech!",
-  contexts: ['selection']
-})
+// chrome.contextMenus.create({
+//   id: "myContextMenu",
+//   title: "HS not detected? Mark as hatespeech!",
+//   contexts: ['selection']
+// })
 
-let manuallyHighlighted
+// let manuallyHighlighted
 
-// Add click event listener to the context menu item
-chrome.contextMenus.onClicked.addListener(function(info, tab) {
-  if (info.menuItemId === "myContextMenu") {
-      // Display the selected text in an alert
-      manuallyHighlighted = info.selectionText
-  }
-});
+// // Add click event listener to the context menu item
+// chrome.contextMenus.onClicked.addListener(function(info, tab) {
+//   if (info.menuItemId === "myContextMenu") {
+//       // Display the selected text in an alert
+//       manuallyHighlighted = info.selectionText
+//   }
+// });
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   sendResponse({message: manuallyHighlighted})
