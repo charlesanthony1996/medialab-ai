@@ -4,28 +4,54 @@ const modalHTML = `
   <div class="modal-content">
     <span class="close">&times;</span>
     <h3 style="font-size:26px;">Counter speech</h3>
-    <button class="copy">Copy</button>
+    <p id="counterSpeechText"></p>
+    <button id="copy">Copy</button>
+    <button id="generateCounterSpeech">Generate Counter speech</button>
   </div>
 </div>
-<button id="openModalButton">Open Extension</button>
+<button id="openModalButton" style="margin-left:40px;height:50px;z-index:9998;">Open Extension</button>
 `;
-document.body.insertAdjacentHTML("beforeend", modalHTML);
+document.body.insertAdjacentHTML("beforeend", modalHTML)
 
 const modal = document.getElementById("myModal");
 const btn = document.getElementById("openModalButton");
 const span = document.getElementsByClassName("close")[0];
+const copy = document.getElementById("copy")
 
 span.onclick = function() {
     modal.style.display = "none";
+    // Clean up modal content
+    document.getElementById("counterSpeechText").innerText = "";
 }
 
 btn.onclick = function() {
-    modal.style.display = "block";
+    // Locate the container that holds the comment text
+    console.log("button hit")
+    const commentContainer = document.getElementById('content-text');
+
+    // Access the specific span containing the text
+    const commentElement = commentContainer.querySelector('.yt-core-attributed-string--white-space-pre-wrap');
+    
+    if (commentElement) {
+        const commentText = commentElement.innerText.trim();
+        console.log("Comment Text:", commentText);
+        // If you have a function to handle this text, call it here
+        // analyzeCommentAndDisplayCounterSpeech(commentText);
+    } else {
+        console.log("Comment element not found.");
+    }
 };
+
+
+copy.onclick = function() {
+    console.log("copied")
+}
 
 window.onclick = function(event) {
     if (event.target === modal) {
         modal.style.display = "none";
+        // Clean up modal content
+        document.getElementById("counterSpeechText").innerText = "";
     }
 }
 
@@ -63,13 +89,58 @@ const css = `
   text-decoration: none;
   cursor: pointer;
 }
-
 `;
 
 const styleSheet = document.createElement("style");
 styleSheet.type = "text/css";
 styleSheet.innerText = css;
 document.head.appendChild(styleSheet);
+
+// Function to send comment text to backend server for analysis
+function analyzeCommentAndDisplayCounterSpeech(commentText) {
+    fetch('http://localhost:6001/api/analyze_hate_speech', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ text: commentText }) // Sending comment text under 'text' key
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        const modalContent = document.querySelector(".modal-content");
+        if (data.analysis_result === "Hate Speech") {
+            // If classified as hate speech, display counter speech in modal
+            const counterSpeech = data.counter_speech;
+            modalContent.innerHTML = `
+                <span class="close">&times;</span>
+                <h3 style="font-size:26px;">Counter speech</h3>
+                <p id="counterSpeechText">${counterSpeech}</p>
+                <button class="copy">Copy</button>
+            `;
+            modal.style.display = "block";
+        } else {
+            // If not classified as hate speech, show "No hate speech detected."
+            modalContent.innerHTML = `
+                <span class="close">&times;</span>
+                <h3 style="font-size:26px;">Counter speech</h3>
+                <p id="counterSpeechText">No hate speech detected.</p>
+                <button class="copy">Copy</button>
+            `;
+            modal.style.display = "block";
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+
+
 
 function appendButtonToComment(commentElement) {
     if (!commentElement.hasAttribute("data-button-appended")) {
@@ -78,6 +149,9 @@ function appendButtonToComment(commentElement) {
 
         // Attach an event listener to this newly created button
         button.onclick = function() {
+            // Set the comment text in the modal
+            const commentText = commentElement.innerText.trim();
+            document.getElementById("counterSpeechText").innerText = commentText;
             modal.style.display = "block";
         };
 
@@ -126,7 +200,7 @@ const observerCallback = (entries) => {
     const latestComments = Array.from(observedComments).slice(-5)
     // console.clear()
     latestComments.forEach((comment, index) => {
-        console.log(`Comment ${index + 1}: ${comment.innerText}`)
+        // console.log(`Comment ${index + 1}: ${comment.innerText}`)
 
         // add the styling here to the comment
         // comment.highlight.add('highlight')
@@ -147,40 +221,73 @@ const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             observedComments.add(entry.target);
-            appendButtonToComment(entry.target);
+            appendButtonToComment(entry.target); // Ensure the button is appended to each comment
         } else {
             observedComments.delete(entry.target);
         }
     });
-
-    // Optional: Log the latest 5 comments
-    const latestComments = Array.from(observedComments).slice(-5);
-    console.clear();
-    latestComments.forEach((comment, index) => {
-        console.log(`Comment ${index + 1}: ${comment.innerText}`);
-    });
-
 }, {
     root: null,
     rootMargin: '0px',
     threshold: 0.1
 });
 
-// assuming comments are initially present otherwise you may need to wait or retry this
 document.querySelectorAll('.yt-core-attributed-string.yt-core-attributed-string--white-space-pre-wrap')
-    .forEach(comment => observer.observe(comment))
+    .forEach(comment => observer.observe(comment));
 
-
-// listen to scroll to attach observer to dynamically loaded comments
 window.addEventListener('scroll', () => {
     document.querySelectorAll('.yt-core-attributed-string.yt-core-attributed-string--white-space-pre-wrap')
-    .forEach(comment => observer.observe(comment))
-})
+        .forEach(comment => observer.observe(comment))
+});
+
 
 // modal stuff
 
 
 // IntersectionObserver and other event listeners remain the same
+
+
+// detecting for hate speech
+// Function to send comment text to backend server for analysis
+// function analyzeCommentAndDisplayCounterSpeech(commentText) {
+//     fetch('http://localhost:6001/api/analyze_hate_speech', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//         body: JSON.stringify({ text: commentText }) // Sending comment text under 'text' key
+//     })
+//     .then(response => {
+//         if (!response.ok) {
+//             throw new Error('Network response was not ok');
+//         }
+//         return response.json();
+//     })
+//     .then(data => {
+//         if (data.analysis_result === "Hate Speech") {
+//             // If classified as hate speech, display counter speech in modal
+//             const counterSpeech = data.counter_speech;
+//             console.log("yo read this: ", data.counterSpeech)
+//             // Update modal content with counter speech
+//             const modalContent = document.querySelector(".modal-content");
+//             modalContent.innerHTML = `
+//                 <span class="close">&times;</span>
+//                 <h3 style="font-size:26px;">Counter speech</h3>
+//                 <p>${counterSpeech}</p>
+//                 <button class="copy">Copy</button>
+//             `;
+//             // Display modal
+//             modal.style.display = "block";
+//         } else {
+//             // If not classified as hate speech, handle it differently
+//             console.log("Comment is not hate speech");
+//         }
+//     })
+//     .catch(error => {
+//         console.error('Error:', error);
+//     });
+// }
+
 
 
 
@@ -190,6 +297,7 @@ const observedCommentsForCopy = new Set();
 const observerCallbackForCopy = (entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
+            // analyzeCommentAndDisplayCounterSpeech(entry.target.innerText)
             sendCommentToServer(entry.target.innerText)
                 .then(result => {
                     // button addition here as well
@@ -197,15 +305,15 @@ const observerCallbackForCopy = (entries) => {
                     // Making it display here 'Is not HS'. Its commented out just to highlight atm
                     // Good for testing
                     // entry.target.innerText = result;
-                    console.log(`Server result: ${result}`);
-                    console.log('Result:', result); // Log the value of result
+                    // console.log(`Server result: ${result}`);
+                    // console.log('Result:', result); // Log the value of result
                     observedCommentsForCopy.add(result);
                     if (result !== 'Is not HS') {
                         entry.target.style.backgroundColor = 'lightcoral';
-                        console.log('Setting background color to lightcoral');
+                        // console.log('Setting background color to lightcoral');
                     } else {
                         entry.target.style.backgroundColor = 'darkolivegreen'
-                        console.log('Resetting background color');
+                        // console.log('Resetting background color');
                     }
                 })
                 .catch(error => {
@@ -257,7 +365,7 @@ const sendCommentToServer = (commentText) => {
             return response.json(); // Parse the response JSON
         })
         .then(data => {
-            console.log('Comment sent successfully');
+            // console.log('Comment sent successfully');
             resolve(data.comment); // Resolve with the comment from the response
         })
         .catch(error => {
@@ -318,3 +426,32 @@ document.addEventListener('mouseup', function() {
 
 
 // Correct method to inject HTML
+
+document.getElementById('generateCounterSpeech').addEventListener('click', function() {
+    // Get the current text displayed in the modal
+    const commentText = document.getElementById('counterSpeechText').innerText;
+
+    // Send the text to the backend to analyze and generate counter speech
+    fetch('http://localhost:6001/api/analyze_hate_speech', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ text: commentText }) // Sending the displayed comment text
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Check the response for counter speech or indication of no hate speech
+        if (data.analysis_result) {
+            // Display the generated counter speech in the modal
+            document.getElementById('counterSpeechText').innerText = data.analysis_result;
+        } else {
+            // If no counter speech is generated, display a no hate speech message
+            document.getElementById('counterSpeechText').innerText = "No hate speech detected.";
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('counterSpeechText').innerText = "Error generating counter speech.";
+    });
+});
