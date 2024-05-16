@@ -19,7 +19,8 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/hatespeech',
     name: 'hatespeech',
-    component: HateSpeech
+    component: HateSpeech,
+    // props: route => ({ userName: route.state.userName })
   },
   {
     path: '/signin',

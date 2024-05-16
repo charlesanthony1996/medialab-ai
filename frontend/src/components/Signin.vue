@@ -36,9 +36,12 @@ const signIn = () => {
         .auth()
         .signInWithEmailAndPassword(email.value, password.value)
         .then((data) => {
+            // const user = data.user
+            // const userName = user.displayName || user.email
+
             console.log("sucessfully logged in")
             Cookies.set("myCookie", 'loggedIn', {expires: 7})
-            router.push("/hatespeech")
+            router.push({name: "HateSpeech", state: { userName }})
         })
         .catch(error => {
             switch (error.code) {

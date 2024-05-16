@@ -3,13 +3,17 @@ const modalHTML = `
 <div id="myModal" class="modal">
   <div class="modal-content">
     <span class="close">&times;</span>
-    <h3 style="font-size:26px;">Counter speech</h3>
-    <p id="counterSpeechText"></p>
-    <button id="copy">Copy</button>
-    <button id="generateCounterSpeech">Generate Counter speech</button>
+    <h1 class="modal-text">Counter speech</h1>
+    <p id="counterSpeechText" class="modal-counter"></p>
+    <button id="copy" class="modal-btn">Copy</button>
+    <button id="generateCounterSpeech" class="modal-btn-gen">Generate Counter speech</button>
   </div>
 </div>
-<button id="openModalButton" style="margin-left:40px;height:50px;z-index:9998;">Open Extension</button>
+<button id="openModalButton" class="open-modal-button">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+    </svg>
+</button>
 `;
 document.body.insertAdjacentHTML("beforeend", modalHTML)
 
@@ -67,28 +71,36 @@ const css = `
     background-color: rgba(0,0,0,0.4); 
 }
 .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto; 
-    padding: 20px;
-    border: 1px solid #888;
-    width: 50%;
-    height: 20%;
-    z-index: 1000;
-}
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;  
+    background-color: #242424; /* Black background for better visibility */
+    color: #ffffff; /* White text for contrast */
+    margin: 15% auto;
+    padding: 70px; /* Increased padding for more space around the text */
+    border-radius: 10px;
+    width: 40vw; /* Adjusted width */
+    max-width: 800px; /* Adjusted max width */
+    display: flex; /* Set display to flex */
+    flex-direction: column; /* Stack children vertically */
+    justify-content: center; /* Center children horizontally */
+    align-items: center; /* Center children vertically */
+    z-index: 9999; /* Ensure it's above the modal overlay */
 }
 
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
+.close {
+    position: absolute; /* Positioning relative to modal-content */
+    top: 10px; /* Distance from the top of modal-content */
+    right: 20px; /* Distance from the right of modal-content */
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .close:hover, .close:focus {
+    color: #646cff;
+    text-decoration: none;
+    cursor: pointer;
+  }
 `;
 
 const styleSheet = document.createElement("style");
@@ -207,6 +219,7 @@ const observerCallback = (entries) => {
         //comment.style.backgroundColor = 'lightcoral'
     })
 
+    console.log("Preparing to send message:", latestComments.map(comment => comment.innerText));
     chrome.runtime.sendMessage({ action: "updateComments", comments: latestComments.map(comment => comment.innerText )})
     
 }
@@ -232,12 +245,14 @@ const observer = new IntersectionObserver((entries) => {
     threshold: 0.1
 });
 
+const observer2 = new IntersectionObserver(observerCallback, observerOptions)
+
 document.querySelectorAll('.yt-core-attributed-string.yt-core-attributed-string--white-space-pre-wrap')
-    .forEach(comment => observer.observe(comment));
+    .forEach(comment => observer.observe(comment), comment => observer2.observe(comment));
 
 window.addEventListener('scroll', () => {
     document.querySelectorAll('.yt-core-attributed-string.yt-core-attributed-string--white-space-pre-wrap')
-        .forEach(comment => observer.observe(comment))
+        .forEach(comment => observer.observe(comment), comment => observer2.observe(comment))
 });
 
 
@@ -306,7 +321,7 @@ const observerCallbackForCopy = (entries) => {
                     // Good for testing
                     // entry.target.innerText = result;
                     // console.log(`Server result: ${result}`);
-                    // console.log('Result:', result); // Log the value of result
+                    console.log('Result:', result); // Log the value of result
                     observedCommentsForCopy.add(result);
                     if (result !== 'Is not HS') {
                         entry.target.style.backgroundColor = 'lightcoral';
@@ -329,8 +344,8 @@ const observerCallbackForCopy = (entries) => {
 
 const observerOptionsForCopy = {
     root: null,
-    rootMargin: '10px',
-    threshold: 0.5
+    rootMargin: '0px',
+    threshold: 0.1
 }
 
 const observerForCopy = new IntersectionObserver(observerCallbackForCopy, observerOptionsForCopy)
@@ -339,6 +354,7 @@ document.querySelectorAll('.yt-core-attributed-string.yt-core-attributed-string-
     .forEach(comment => {
         observerForCopy.observe(comment)
         // appendButtonToComment(comment)
+        observer2.observe(comment)
     })
 
 window.addEventListener('scroll', () => {
@@ -346,6 +362,8 @@ window.addEventListener('scroll', () => {
     .forEach(comment => {
         observerForCopy.observe(comment)
         // appendButtonToComment(comment)
+        observer2.observe(comment)
+
 })
 })
 
