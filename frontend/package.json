@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@crxjs/vite-plugin": "^1.0.14",
     "@google-cloud/firestore": "^7.6.0",
     "@mdi/font": "^7.4.47",
     "axios": "^1.6.7",
