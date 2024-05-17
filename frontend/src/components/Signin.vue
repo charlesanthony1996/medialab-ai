@@ -21,11 +21,14 @@ import { ref } from 'vue'
 import firebase from "firebase/compat/app"
 import { useRouter } from 'vue-router'
 import '@mdi/font/css/materialdesignicons.min.css'
+import Cookies from 'js-cookie'
 
 const email = ref("")
 const password = ref("")
 const router = useRouter()
 const errMsg = ref("")
+const visible = ref(false)
+
 
 
 const signIn = () => {
@@ -33,8 +36,12 @@ const signIn = () => {
         .auth()
         .signInWithEmailAndPassword(email.value, password.value)
         .then((data) => {
+            // const user = data.user
+            // const userName = user.displayName || user.email
+
             console.log("sucessfully logged in")
-            router.push("/hatespeech")
+            Cookies.set("myCookie", 'loggedIn', {expires: 7})
+            router.push({name: "HateSpeech", state: { userName }})
         })
         .catch(error => {
             switch (error.code) {
@@ -54,7 +61,16 @@ const signIn = () => {
         })
 }
 
-const visible = ref(false)
+function setCookie(name, value, days) {
+    var expires = ""
+    if (days) {
+        var date = new Date()
+        date.Date(date.getTime() + (days * 24 * 60 * 60 * 1000))
+        expires = "; expires=" + date.toUTCString()
+    }
+
+    document.cookie = name + "=" + (value || "") + expires + "; path=/"
+}
 
 </script>
 

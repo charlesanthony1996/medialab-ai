@@ -4,6 +4,8 @@ import HateSpeech from '../components/HateSpeech.vue'
 import Signin from '../components/Signin.vue'
 import Signup from '../components/Signup.vue'
 import firebase from "firebase/compat/app"
+import Settings from "../components/Settings.vue"
+import Cookies from 'js-cookie'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -17,7 +19,8 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/hatespeech',
     name: 'hatespeech',
-    component: HateSpeech
+    component: HateSpeech,
+    // props: route => ({ userName: route.state.userName })
   },
   {
     path: '/signin',
@@ -32,6 +35,12 @@ const routes: Array<RouteRecordRaw> = [
     meta: { guestOnly: true}
 
   },
+  {
+    path: '/settings',
+    name: 'settings',
+    component: Settings,
+    meta: { guestOnly: true}
+  }
 //   { path: '/:pathMatch(.*)*', redirect: '/' },
 ]
 
@@ -40,20 +49,29 @@ const router = createRouter({
   routes,
 })
 
-// auth setup
-router.beforeEach((to, _from, next) => {
+// auth setup and a promise to wait till the browser detects for the cookie
+router.beforeEach(async (to, _from, next) => {
+  const user = await new Promise(resolve => firebase.auth().onAuthStateChanged(resolve))
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
   const guestOnly = to.matched.some(record => record.meta.guestOnly)
-  const isAuthenticated = firebase.auth().currentUser
+  const isAuthenticated = user != null
+  const hasCookie = Cookies.get('myCookie')
 
-  if(requiresAuth && !isAuthenticated) {
-    next('/signin')
-  } else if (isAuthenticated && guestOnly){
-    next('/hatespeech')
+
+  if (to.path === '/hatespeech' && isAuthenticated && hasCookie) {
+    return next()
+  }
+
+  if (requiresAuth && !isAuthenticated && !hasCookie) {
+    return next('/signin')
+  } else if (guestOnly && isAuthenticated) {
+    return next('/hatespeech')
   } else {
     next()
   }
 })
+
+
 
 // router.beforeEach((to, from, next) => {
 // // 

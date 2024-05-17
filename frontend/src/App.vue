@@ -24,7 +24,8 @@ import { useRouter } from 'vue-router'
 import firebase from 'firebase/compat/app'
 import "firebase/compat/firestore"
 import "firebase/compat/auth"
-import PopupCard from './components/popup.vue';
+import PopupCard from './components/Popup.vue';
+import Cookies from 'js-cookie'
 
 const display = ref('')
 const analysisResult = ref('')
@@ -61,6 +62,7 @@ firebase.auth().onAuthStateChanged(function (user) {
 
 // sign out function for firebase
 const signOut = () => {
+  Cookies.remove('myCookie')
   firebase.auth().signOut()
   router.push('/')
 }
@@ -101,16 +103,16 @@ if (text.trim().length > 0) {
 
 
 
-onMounted(() => {
-  document.addEventListener('mouseup', updateDisplayWithSelectedText)
-  document.addEventListener('keyup', updateDisplayWithSelectedText)
+// onMounted(() => {
+//   document.addEventListener('mouseup', updateDisplayWithSelectedText)
+//   document.addEventListener('keyup', updateDisplayWithSelectedText)
   
-})
+// })
 
-onUnmounted(() => {
-  document.removeEventListener('mouseup', updateDisplayWithSelectedText)
-  document.removeEventListener('keyup', updateDisplayWithSelectedText)
-})
+// onUnmounted(() => {
+//   document.removeEventListener('mouseup', updateDisplayWithSelectedText)
+//   document.removeEventListener('keyup', updateDisplayWithSelectedText)
+// })
 
 document.body.appendChild(document.createElement('div')).setAttribute('id', 'dialog-container');
 

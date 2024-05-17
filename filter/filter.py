@@ -1,55 +1,91 @@
 import torch
 import transformers
 import numpy as np
-from transformers import AutoTokenizer, TFAutoModelForSequenceClassification
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import json
-import tensorflow as tf
+# import tensorflow as tf
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from scipy.special import softmax
 
+# some token idk -> read about it
+import os
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
+
+# class TextProcessor:
+#     def __init__(self, config_path):
+#         with open("config.json", 'r') as config_file:
+#             self.config = json.load(config_file)
+
+#         self.active_config = self.config["models"][self.config["active_model"]]
+#         self.model = TFAutoModelForSequenceClassification.from_pretrained(self.active_config["model_path"])
+#         self.tokenizer = AutoTokenizer.from_pretrained(self.active_config["model_path"])
+#         self.threshold = self.active_config["threshold"]
+
+
+#     def get_current_filter(self):
+#         return self.config["active_model"]
+
+
+#     def preprocess(self, text):
+#         if self.active_config["preprocess"]["lower_case"]:
+#             text = text.lower()
+
+#         if self.active_config["preprocess"]["remove_punctuation"]:
+#             text = ''.join(char for char in text if char.isalnum() or char.isspace())
+#         return text
+
+
+#     def process_text(self, text):
+#         text = self.preprocess(text)
+#         encoded_input = self.tokenizer(text, return_tensors='tf')
+#         output = self.model(encoded_input)
+#         logits = output.logits
+#         scores = tf.nn.softmax(logits, axis=-1).numpy()
+#         negativity_score = scores[0][0]
+#         return negativity_score > self.threshold, text, negativity_score
+
 class TextProcessor:
     def __init__(self, config_path):
-        with open("config.json", 'r') as config_file:
+        with open(config_path, 'r') as config_file:
             self.config = json.load(config_file)
 
         self.active_config = self.config["models"][self.config["active_model"]]
-        self.model = TFAutoModelForSequenceClassification.from_pretrained(self.active_config["model_path"])
+        self.model = AutoModelForSequenceClassification.from_pretrained(self.active_config["model_path"])
         self.tokenizer = AutoTokenizer.from_pretrained(self.active_config["model_path"])
         self.threshold = self.active_config["threshold"]
-
 
     def get_current_filter(self):
         return self.config["active_model"]
 
-
     def preprocess(self, text):
         if self.active_config["preprocess"]["lower_case"]:
             text = text.lower()
-
         if self.active_config["preprocess"]["remove_punctuation"]:
             text = ''.join(char for char in text if char.isalnum() or char.isspace())
         return text
 
-
     def process_text(self, text):
         text = self.preprocess(text)
-        encoded_input = self.tokenizer(text, return_tensors='tf')
-        output = self.model(encoded_input)
+        encoded_input = self.tokenizer(text, return_tensors='pt')
+        with torch.no_grad():
+            output = self.model(**encoded_input)
         logits = output.logits
-        scores = tf.nn.softmax(logits, axis=-1).numpy()
+        scores = torch.nn.functional.softmax(logits, dim=-1).numpy()
         negativity_score = scores[0][0]
         return negativity_score > self.threshold, text, negativity_score
 
 
 # end of class
 app = Flask(__name__)
+app.debug = True
 cors = CORS(app, resources={r"/api/*" : { "origins": "*" }})
 processor = TextProcessor('config.json')
 
 def direct_test(sentence):
     filtered, processed_text , score = processor.process_text(sentence)
-    print(f"Sentence: '{sentence}'\nFiltered: {filtered}\nProcessed Text: {processed_text}\nNegativity Score: {score}\n")
+    print(f"Sentence: '{sentence}'\nFiltered: {filtered}\nNegativity Score: {score}\n")
 
 @app.route("/api/test", methods=["POST"])
 def filter_text():
@@ -60,14 +96,16 @@ def filter_text():
         if not text:
             return jsonify({"error": "No text provided"}), 400
         
-        fitered, processed_text , score = processor.process_text(text)
+        filtered, processed_text , score = processor.process_text(text)
+        score = float(score)
         if filtered:
             return jsonify({"filtered_text": processed_text, "negativity_score": score})
         else:
-            return jsonify({"filtered_text": "Text does not exceed the negativity threshold", "negativity_score": score})
+            return jsonify({"filtered_text": "Is not HS", "negativity_score": score})
     
     except Exception as e:
         return jsonify({"error": str((e))}), 500
+
 
         
 

@@ -13,7 +13,7 @@ import firebase from "firebase/compat/app"
 import "firebase/compat/firestore"
 import "firebase/compat/auth"
 // import { getAnalytics } from "firebase/analytics"
-import PopupCard from './components/popup.vue';
+import PopupCard from './components/Popup.vue';
 
 const pinia = createPinia()
 const app = createApp(App)
@@ -26,6 +26,7 @@ popupContainer.id = 'popup-container'
 document.body.appendChild(popupContainer)
 popupApp.mount('#popup-container')
 
+// popup id attached here
 app.mount('#dialog-container')
 
 var firebaseConfig = {

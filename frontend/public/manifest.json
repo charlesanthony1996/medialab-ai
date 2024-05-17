@@ -1,28 +1,41 @@
 {
-    "name": "Hate Speech Application Extension",
+    "name": "Hate Speech App (Experimental)",
     "version": "1.0.0",
     "description": "This is an extension to detect and counter hate speech for a social media platform",
     "manifest_version": 3,
     "author": "Charles Anthony",
     "action": {
+        "default_icon": "./assets/shield128.png",
         "default_popup": "index.html",
         "default_title": "Hate Speech Application Extension"
     },
-    "permissions": ["tabs", "activeTab", "storage", "background", "scripting", "runtime", "contextMenus"],
+    "permissions": ["tabs", "activeTab", "storage", "background", "scripting", "contextMenus"],
     "content_scripts": [
         {
-          "matches": ["*://*.youtube.com/*"],
-          "js": ["contentScript.js"],
-          "css": ["style.css"]
+          "matches": ["<all_urls>"],
+          "js": ["content/content.js"],
+          "css": ["style.css"],
+          "type": "module"
         }
       ],      
     "host_permissions": [
         "*://*.youtube.com/*"
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": ["content/*.js"],
+            "matches": ["<all_urls>"]
+        }
     ],
     "content_security_policy": {
         "extension_pages": "script-src 'self'; object-src 'self'"
     },
     "background": {
         "service_worker": "background.js"
+    },
+    "icons": {
+        "16": "./assets/shield16.png",
+        "48": "./assets/shield48.png",
+        "128": "./assets/shield128.png"
     }
 }

@@ -9,6 +9,9 @@ import requests
 # Load environment variables
 load_dotenv()
 
+# Example Change for Submodules Tutorial
+a = 1
+
 # Setup Flask application
 app = Flask(__name__)
 app.debug = True
@@ -24,7 +27,8 @@ def get_data():
 
 # dummy function
 def fetch_greeting():
-    response = requests.get("http://openai_backend:6000/api/greeting")
+    # response = requests.get("http://openai_backend:6001/api/greeting")
+    response = requests.get("http://localhost:6001/api/greeting")
     if response.status_code == 200:
         data = response.json()
         return data["greeting"]
@@ -60,7 +64,9 @@ def process_comments():
         #response_comment = "backend boy"
         
         # Make a POST request to another route to filter the text
-        filter_response = requests.post('http://filter:7000/api/test', json={'text': response_comment})
+        # filter_response = requests.post('http://filter:7001/api/test', json={'text': response_comment})
+        # charles running things locally -> what run_services.sh file is all about. dont delete
+        filter_response = requests.post('http://localhost:7001/api/test', json={'text': response_comment})
         
         # Check if the request was successful
         if filter_response.status_code == 200:
@@ -73,7 +79,6 @@ def process_comments():
         print("Error during processing comments:", str(e))
         return jsonify({'error': str(e)}), 500
 
-
 # New route to handle text filtering
 @app.route('/api/filter', methods=['POST'])
 def filter_text():
@@ -84,25 +89,26 @@ def filter_text():
         if not text:
             return jsonify({"error": "No text provided"}), 400
 
-        # Call your TwitterRoberta implementation to generate response
-        print("Text sent to the filter:", text)
-        
-        # Make a POST request to another route to filter the text
-        filter_response = requests.post('http://filter:7000/api/test', json={'text': text})
-        
-        # Check if the request was successful
-        if filter_response.status_code == 200:
-            response = filter_response.json().get('filtered_text')
-            responseFromLLM = requests.post("http://openai_backend:6000/api/analyze_hate_speech", json={"text": response})
-            analysis_result = responseFromLLM.json().get('analysis_result', '')
-            return jsonify({"filtered_text": analysis_result})
-        else:
-            return jsonify({"error": "Failed to filter text"}), 500
+        # Attempt to filter the text
+        try:
+            # filter_response = requests.post('http://filter:7001/api/test', json={'text': text})
+            filter_response = requests.post('http://localhost:7001/api/test', json={'text': text})
+            if filter_response.status_code == 200:
+                text = filter_response.json().get('filtered_text', text)
+        except Exception as e:
+            print("Filter service failed, using original text:", str(e))
+            # If filtering fails, use the original text for analysis
+            pass
+
+        # Analyze the text (either filtered or original) for hate speech
+        # responseFromLLM = requests.post("http://openai_backend:6001/api/analyze_hate_speech", json={"text": text})
+        responseFromLLM = requests.post("http://localhost:6001/api/analyze_hate_speech", json={"text": text})
+        analysis_result = responseFromLLM.json().get('analysis_result', '')
+        return jsonify({"filtered_text": analysis_result})
 
     except Exception as e:
-        print("Error during text filtering:", str(e))
+        print("Error during text filtering or analysis:", str(e))
         return jsonify({"error": str(e)}), 500
-
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=8000)

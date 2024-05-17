@@ -79,6 +79,7 @@ def database_local():
         print("Error! cannot create the connection")
 
 database_local()
+print("database loaded")
 
 
 if __name__ == '__main__':
