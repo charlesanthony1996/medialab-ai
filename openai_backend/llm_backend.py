@@ -96,7 +96,7 @@ def analyze_hate_speech():
         )
 
         analysis_result = response.choices[0].message.content.strip()
-        # print("analysis result: ", analysis_result)
+        print("analysis result: ", analysis_result)
         return jsonify({"analysis_result": analysis_result}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -109,5 +109,5 @@ def test_hate_speech_detection():
         print(response.get_json())
 
 if __name__ == '__main__':
-    test_hate_speech_detection()
+    # test_hate_speech_detection()
     app.run(debug=True,host='0.0.0.0', port=6001)

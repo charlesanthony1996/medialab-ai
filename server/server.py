@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import os
 import openai
 import requests
+from cachetools import cached, LRUCache
 
 # Load environment variables
 load_dotenv()
@@ -21,11 +22,15 @@ cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 open_api_key = os.getenv('OPEN_API_KEY')
 client = openai.Client(api_key=open_api_key)
 
+cache = LRUCache(maxsize=100)
+
 @app.route('/api/data', methods=['GET'])
+@cached(cache)
 def get_data():
     return jsonify({"message": "This is the data from Flask."})
 
 # dummy function
+@cached(cache)
 def fetch_greeting():
     # response = requests.get("http://openai_backend:6001/api/greeting")
     response = requests.get("http://localhost:6001/api/greeting")
@@ -36,20 +41,24 @@ def fetch_greeting():
         return "Failed to fetch greeting"
 
 @app.route("/api/show_greeting", methods=["GET"])
+@cached(cache)
 def show_greeting():
     greeting = fetch_greeting()
     return jsonify({"server_greeting": greeting})
 
 @app.route('/api/comments', methods=['GET'])
+@cached(cache)
 def get_comments():
     return jsonify({"comment": "first comment"})
 
 @app.route("/extension/default", methods=["GET"])
+@cached(cache)
 def get_default_extension():
     return jsonify({"prompt": "Highlighted"})
 
 
 @app.route('/api/process_comments', methods=['POST'])
+@cached(cache)
 def process_comments():
     try:
         data = request.get_json()
@@ -81,6 +90,7 @@ def process_comments():
 
 # New route to handle text filtering
 @app.route('/api/filter', methods=['POST'])
+@cached(cache)
 def filter_text():
     try:
         data = request.json

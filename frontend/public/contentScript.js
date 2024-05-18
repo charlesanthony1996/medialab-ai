@@ -406,7 +406,7 @@ document.addEventListener('mouseup', function() {
         .then(response => response.json())
         .then(data => {
             alert("Analysis Result: " + data.filtered_text);
-            selection.removeAllRanges();  // Unhighlight the text
+            selection.removeAllRanges();
         })
         .catch(error => console.error('Error:', error));
     }

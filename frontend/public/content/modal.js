@@ -1,4 +1,5 @@
-import { analyzeCommentAndDisplayCounterSpeech } from './api.js';
+import { analyzeCommentAndDisplayCounterSpeech } from './api.js'
+import { handleTextSelection } from './textSelection.js'
 
 export function initModal() {
     const modalHTML = `
@@ -48,8 +49,11 @@ export function initModal() {
 
     window.onclick = function(event) {
         if (event.target === modal) {
-            modal.style.display = "none";
-            document.getElementById("counterSpeechText").innerText = "";
+            modal.style.display = "none"
+            document.getElementById("counterSpeechText").innerText = ""
         }
     };
+
+    handleTextSelection()
+
 }

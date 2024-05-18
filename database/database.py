@@ -1,11 +1,15 @@
 import sqlite3
 from flask import Flask, jsonify
 from flask_cors import CORS
+from cachetools import cached, LRUCache
 
 app = Flask(__name__)
-# cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+
+cache = LRUCache(maxsize=100)
 
 @app.route('/')
+@cached(cache)
 def home():
     return jsonify({"message": "Database Service Running"})
 
@@ -78,9 +82,59 @@ def database_local():
     else:
         print("Error! cannot create the connection")
 
-database_local()
-print("database loaded")
+# database_local()
+# print("database loaded")
+
+# settings_info db
+settings_database = "settings_info.db"
+
+def get_db():
+    conn = sqlite3.connect(settings_database)
+    return conn
+
+@app.route("/api/save_settings", methods=["POST"])
+@cached(cache)
+def save_settings():
+    data = request.data_json()
+    user_id = data.get("userId")
+    settings = data.get("settings")
+
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT INTO user_settings (user_id, settings) VALUES (?, ?)
+        ON CONFLICT(user_id) DO UPDATE SET settings=excluded.settings;
+    ''', (user_id, json.dumps(settings)))
+    conn.commit()
+    conn.close()
+
+    return jsonify({"status": "success"})
+
+
+@app.route("/api/load_settings", methods=["GET"])
+@cached(cache)
+def load_settings():
+    user_id = request.args.get('userId')
+
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute('SELECT settings FROM user_settings WHERE user_id = ?', (user_id,))
+    row = cursor.fetchone()
+    conn.close()
+
+    if row:
+        settings = json.loads(row[0])
+        return jsonify({"settings": settings})
+    else:
+        return jsonify({"settings": {}})
 
 
 if __name__ == '__main__':
+    with get_db() as conn:
+        conn.execute('''
+            CREATE TABLE IF NOT EXISTS user_settings (
+                user_id TEXT PRIMARY KEY,
+                settings TEXT
+            )
+        ''')
     app.run(host='0.0.0.0', port=5001, debug=True)

@@ -27,6 +27,7 @@
             :items="['sarcastic', 'formal', 'humorous', 'intelligent']"
             variant="outlined"
             v-model="selectedResponseType"
+            @change="saveSettings"
         ></v-select>
     </v-container>
 
@@ -37,6 +38,8 @@
             label="Select"
             :items="['LLM', 'Filter']"
             variant="outlined"
+            v-model="selectedFilterType"
+            @change="saveSettings"
         ></v-select>
     </v-container>
 
@@ -44,10 +47,11 @@
 
     <v-container id="Mode">
         <v-switch
-        v-model="model"
-        :label="`${model}`"
+        v-model="darkMode"
+        :label="`${darkMode}`"
         false-value="off"
         true-value="on"
+        @change="saveSettings"
         ></v-switch>
     </v-container>
 
@@ -55,12 +59,69 @@
 
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import firebase from "firebase/compat/app"
 import { useRouter } from 'vue-router'
 import { createVuetify } from 'vuetify'
 import '@mdi/font/css/materialdesignicons.min.css'
 import axios from 'axios'
+
+const selectedResponseType = ref('')
+const selectedFilterType = ref('')
+const darkMode = ref('off')
+const router = useRouter()
+
+const saveSettings = async() => {
+    const settings = {
+        responseType: selectedResponseType.value,
+        filterType: selectedFilterType.value,
+        darkMode: darkMode.value
+    }
+
+    // save settings to local storage
+    localStorage.setItem("settings", JSON.stringify(settings))
+
+    // if the user is signed in, save settings to the database
+    const user = firebase.auth().currentUser
+    if(user) {
+        try {
+            await axios.post("/api/save_settings", {
+                userId: user.uid,
+                settings
+            })
+        } catch(error) {
+            console.log("failed to save the settings to the database: ", error)
+        }
+    }
+}
+
+
+const loadSettings = async() => {
+    const user = firebase.auth().currentUser
+    let settings = null
+
+    if(user) {
+        // load settings from the database
+        try {
+            const response = await axios.get("http://localhost:5001/api/load_settings", {
+                params: { userId: user.uid }
+            })
+            settings = response.data.settings
+        } catch(error) {
+            console.log("failed to load settings from the database: ", error)
+        }
+    }
+
+    if(!settings) {
+        // load settings from the local database
+        const storedSettings = localStorage.getItem("settings")
+        settings = storedSettings ? JSON.parse(storedSettings): {}
+    }
+
+    selectedResponseType.value = settings.responseType || ''
+    selectedFilterType.value = settings.filterType || ''
+    darkMode.value = settings.darkMode || ''
+}
 
 const sendRequest = async(userMessage) => {
     try {
@@ -74,8 +135,7 @@ const sendRequest = async(userMessage) => {
     }
 }
 
-const model = ref('off')
-const selectedResponseType = ref('')
+onMounted(loadSettings)
 </script>
 
 <style scoped>

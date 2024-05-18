@@ -16,10 +16,12 @@ export FLASK_APP_DIR="$(pwd)"
 CMD1="cd '$FLASK_APP_DIR/openai_backend' && nodemon --exec python3 llm_backend.py"
 CMD2="cd '$FLASK_APP_DIR/filter' && nodemon --exec python3 filter.py"
 CMD3="cd '$FLASK_APP_DIR/server' && nodemon --exec python3 server.py"
+CMD4="cd '$FLASK_APP_DIR/database' && nodemon --exec python3 database.py"
 
 # Open new Terminal tabs for each command
 open_new_tab "$CMD1"
 open_new_tab "$CMD2"
 open_new_tab "$CMD3"
+open_new_tab "$CMD4"
 
 echo "Services are starting in separate terminal tabs..."
