@@ -1,5 +1,5 @@
 import sqlite3
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 from cachetools import cached, LRUCache
 
@@ -9,7 +9,7 @@ cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 cache = LRUCache(maxsize=100)
 
 @app.route('/')
-@cached(cache)
+# @cached(cache)
 def home():
     return jsonify({"message": "Database Service Running"})
 
@@ -93,9 +93,9 @@ def get_db():
     return conn
 
 @app.route("/api/save_settings", methods=["POST"])
-@cached(cache)
+# @cached(cache)
 def save_settings():
-    data = request.data_json()
+    data = request.get_json()
     user_id = data.get("userId")
     settings = data.get("settings")
 
@@ -112,7 +112,7 @@ def save_settings():
 
 
 @app.route("/api/load_settings", methods=["GET"])
-@cached(cache)
+# @cached(cache)
 def load_settings():
     user_id = request.args.get('userId')
 
@@ -137,4 +137,4 @@ if __name__ == '__main__':
                 settings TEXT
             )
         ''')
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    app.run(debug=True,host='0.0.0.0', port=5001)
