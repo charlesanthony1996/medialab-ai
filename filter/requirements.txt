@@ -12,3 +12,5 @@ protobuf==3.20
 scipy.special
 sentencepiece
 tensorflow
+python-dotenv
+cachetools

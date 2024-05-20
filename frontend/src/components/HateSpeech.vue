@@ -9,9 +9,9 @@
             {{ index + 1 }}: {{ comment }}
         </p>
     </v-row>
-    <br>
+    <!-- <br>
     <span>Fuck you</span>
-    <br>
+    <br> -->
     <div v-if="isLoading" class="loading-overlay">
       <div class="loading-spinner"></div>
     </div>

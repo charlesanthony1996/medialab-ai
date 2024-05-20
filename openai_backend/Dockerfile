@@ -10,6 +10,18 @@ COPY . /app
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
+RUN pip install --no-cache-dir openai
+RUN pip install --no-cache-dir python-dotenv
+RUN pip install --no-cache-dir Flask
+RUN pip install --no-cache-dir Flask-Cors
+RUN pip install --no-cache-dir groq
+RUN pip install --no-cache-dir langchain
+RUN pip install --no-cache-dir langchain-openai
+RUN pip install --no-cache-dir langchain-groq
+RUN pip install --no-cache-dir chromadb
+RUN pip install --no-cache-dir json5
+RUN pip install --no-cache-dir langchain-community
+
 # Make port 5000 available to the world outside this container
 EXPOSE 6000
 

@@ -4,7 +4,7 @@
   <v-btn v-if="!isLoggedIn" style="width:100px;height:30px;" to="/signin" variant="outlined">Sign in</v-btn>
   <v-btn @click="signOut" style="width:100px;height:30px;" variant="outlined">Log out</v-btn>
   <v-btn style="width:200px;height:30px;font-size:15px;" to="/hatespeech" variant="outlined">Continue as a guest</v-btn>
-  <v-btn @click="getGreeting()">Greeting</v-btn>
+  <!-- <v-btn @click="getGreeting()">Greeting</v-btn> -->
 
   <div id="output">{{ outputMessage }}</div>
 

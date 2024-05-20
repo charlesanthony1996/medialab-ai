@@ -120,5 +120,81 @@ def filter_text():
         print("Error during text filtering or analysis:", str(e))
         return jsonify({"error": str(e)}), 500
 
+
+@app.route("/api/generate_counter_speech", methods=["POST"])
+def generate_counter_speech():
+    try:
+        data = request.get_json()
+        user_message = data.get("text", "")
+
+        if not user_message:
+            return jsonify({"error": "No text provided"}), 400
+
+        # Call the local LLM API to generate counter speech
+        response = requests.post("http://localhost:6001/api/generate_counter_speech", json={"text": user_message})
+
+        if response.status_code != 200:
+            print(f"Error from LLM API: {response.text}")
+            return jsonify({"error": "Failed to generate counter speech"}), response.status_code
+
+        response_data = response.json()
+        counter_speech_result = response_data.get("counter_speech_result", "No counter speech generated.")
+
+        return jsonify({"counter_speech_result": counter_speech_result}), 200
+
+    except Exception as e:
+        print(f"Error during processing comments: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+
+
+
+@app.route("/api/explain_hate_speech", methods=["POST"])
+def explain_comment():
+    try:
+        data = request.get_json()
+        comment_text = data.get("text", "")
+
+        if not comment_text:
+            return jsonify({"error": "No text provided"}), 400
+
+        # Call the local LLM API to explain the comment
+        explanationFromLLM = requests.post("http://localhost:6001/api/explain_hate_speech", json={"text": comment_text})
+        if explanationFromLLM.status_code != 200:
+            print(f"Error from LLM API: {explanationFromLLM.text}")
+            return jsonify({"error": "Failed to get explanation"}), explanationFromLLM.status_code
+        
+        explanation_result = explanationFromLLM.json().get("explanation_result", "")
+        return jsonify({"explanation_text": explanation_result}), 200
+
+    except Exception as e:
+        print(f"Error during explaining comments: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/fake_function", methods=["POST"])
+def fake_function():
+    try:
+        data = request.get_json()
+        user_message = data.get("text", "")
+
+        if not user_message:
+            return jsonify({"error": "No text provided"}), 400
+
+        # Call the LLM backend to simulate a response
+        response = requests.post("http://localhost:6001/api/fake_response", json={"text": user_message})
+
+        if response.status_code != 200:
+            print(f"Error from LLM API: {response.text}")
+            return jsonify({"error": "Failed to get fake response"}), response.status_code
+
+        response_data = response.json()
+        fake_response = response_data.get("fake_response", "No fake response generated.")
+
+        return jsonify({"fake_response": fake_response}), 200
+
+    except Exception as e:
+        print(f"Error during processing fake function: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=8000)

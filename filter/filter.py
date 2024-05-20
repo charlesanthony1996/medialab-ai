@@ -1,68 +1,25 @@
 import torch
-import transformers
-import numpy as np
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import json
-# import tensorflow as tf
+from langdetect import detect
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from scipy.special import softmax
-
-# some token idk -> read about it
 import os
+
+
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
-
-# class TextProcessor:
-#     def __init__(self, config_path):
-#         with open("config.json", 'r') as config_file:
-#             self.config = json.load(config_file)
-
-#         self.active_config = self.config["models"][self.config["active_model"]]
-#         self.model = TFAutoModelForSequenceClassification.from_pretrained(self.active_config["model_path"])
-#         self.tokenizer = AutoTokenizer.from_pretrained(self.active_config["model_path"])
-#         self.threshold = self.active_config["threshold"]
-
-
-#     def get_current_filter(self):
-#         return self.config["active_model"]
-
-
-#     def preprocess(self, text):
-#         if self.active_config["preprocess"]["lower_case"]:
-#             text = text.lower()
-
-#         if self.active_config["preprocess"]["remove_punctuation"]:
-#             text = ''.join(char for char in text if char.isalnum() or char.isspace())
-#         return text
-
-
-#     def process_text(self, text):
-#         text = self.preprocess(text)
-#         encoded_input = self.tokenizer(text, return_tensors='tf')
-#         output = self.model(encoded_input)
-#         logits = output.logits
-#         scores = tf.nn.softmax(logits, axis=-1).numpy()
-#         negativity_score = scores[0][0]
-#         return negativity_score > self.threshold, text, negativity_score
-
 class TextProcessor:
-    def __init__(self, config_path):
-        with open(config_path, 'r') as config_file:
-            self.config = json.load(config_file)
-
-        self.active_config = self.config["models"][self.config["active_model"]]
-        self.model = AutoModelForSequenceClassification.from_pretrained(self.active_config["model_path"])
-        self.tokenizer = AutoTokenizer.from_pretrained(self.active_config["model_path"])
-        self.threshold = self.active_config["threshold"]
-
-    def get_current_filter(self):
-        return self.config["active_model"]
+    def __init__(self, model_config):
+        self.model = AutoModelForSequenceClassification.from_pretrained(model_config["model_path"])
+        self.tokenizer = AutoTokenizer.from_pretrained(model_config["model_path"])
+        self.threshold = model_config["threshold"]
+        self.preprocess_config = model_config["preprocess"]
 
     def preprocess(self, text):
-        if self.active_config["preprocess"]["lower_case"]:
+        if self.preprocess_config["lower_case"]:
             text = text.lower()
-        if self.active_config["preprocess"]["remove_punctuation"]:
+        if self.preprocess_config["remove_punctuation"]:
             text = ''.join(char for char in text if char.isalnum() or char.isspace())
         return text
 
@@ -73,19 +30,38 @@ class TextProcessor:
             output = self.model(**encoded_input)
         logits = output.logits
         scores = torch.nn.functional.softmax(logits, dim=-1).numpy()
-        negativity_score = scores[0][0]
-        return negativity_score > self.threshold, text, negativity_score
+        negativity_score = scores[0][1]
+
+        if negativity_score > self.threshold:
+            return True, text, negativity_score
+        else:
+            return False, text, 0
 
 
-# end of class
 app = Flask(__name__)
 app.debug = True
-cors = CORS(app, resources={r"/api/*" : { "origins": "*" }})
-processor = TextProcessor('config.json')
+CORS(app, resources={r"/api/*": {"origins": "*"}})
+
+
+with open('config.json', 'r') as config_file:
+    config = json.load(config_file)
+
+
+english_processor = TextProcessor(config["models"][config["active_model"]])
+german_processor = TextProcessor(config["models"][config["active_model2"]])
+
+def detect_language(text):
+    return detect(text)
 
 def direct_test(sentence):
-    filtered, processed_text , score = processor.process_text(sentence)
-    print(f"Sentence: '{sentence}'\nFiltered: {filtered}\nNegativity Score: {score}\n")
+    language = detect_language(sentence)
+    print("Detected Language:", language)
+    if language == "en":
+        filtered, processed_text, score = english_processor.process_text(sentence)
+        print(f"Sentence: '{sentence}'\nFiltered: {filtered}\nNegativity Score: {score}\n")
+    elif language == "de":
+        filtered, processed_text, score = german_processor.process_text(sentence)
+        print(f"Sentence: '{sentence}'\nFiltered: {filtered}\nNegativity Score: {score}\n")
 
 @app.route("/api/test", methods=["POST"])
 def filter_text():
@@ -95,25 +71,42 @@ def filter_text():
 
         if not text:
             return jsonify({"error": "No text provided"}), 400
+
+        language = detect_language(text)
+        print("Detected Language:", language)
         
-        filtered, processed_text , score = processor.process_text(text)
-        score = float(score)
-        if filtered:
-            return jsonify({"filtered_text": processed_text, "negativity_score": score})
+        if language == "en":
+            filtered, processed_text, score = english_processor.process_text(text)
+        elif language == "de":
+            filtered, processed_text, score = german_processor.process_text(text)
         else:
-            return jsonify({"filtered_text": "Is not HS", "negativity_score": score})
-    
+            return jsonify({"filtered_text": "Unsupported language", "negativity_score": 0})
+
+        response = {
+            "filtered_text": processed_text if filtered else "Is not HS",
+            "negativity_score": float(score)
+        }
+        return jsonify(response)
+
     except Exception as e:
-        return jsonify({"error": str((e))}), 500
-
-
-        
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    # get the current filter your running on json
-    current_filter = processor.get_current_filter()
+    print("Before!!")
+    current_filter = config["active_model"]
     print(f"Currently using filter: {current_filter}")
+    current_filter2 = config["active_model2"]
+    print(f"Currently using filter: {current_filter2}")
+    print("After")
+
+
     direct_test("you are a very horrible person")
-    app.run(debug=True, host='0.0.0.0', port = 7001)
+    direct_test("""
+                Dwight Howard ist eine verdeckte Schwuchtel. 
+                Dieser Typ wurde vor der Kamera erwischt und Isiah Canaan Penis streichelte, 
+                als Sie fÃ¼r die Rockets spielten.Dwights Karriere ist vorbei, 
+                weil er weicher als Marmelade ist und keinen Strandball in einen 
+                Ozean schieÃŸen konnte. Hasse dich bitch!
+                """)
 
-
+    app.run(debug=True, host='0.0.0.0', port=7001)

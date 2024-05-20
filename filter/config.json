@@ -47,7 +47,24 @@
                 "lower_case": false,
                 "remove_punctuation": false
             }
+        },
+        "Hate-speech-CNERG/english-abusive-MuRIL": {
+            "model_path": "Hate-speech-CNERG/english-abusive-MuRIL",
+            "threshold": 0.3,
+            "preprocess": {
+                "lower_case": false,
+                "remove_punctuation": false
+            }
+        },
+        "deepset/bert-base-german-cased-hatespeech-GermEval18Coarse": {
+            "model_path": "deepset/bert-base-german-cased-hatespeech-GermEval18Coarse",
+            "threshold": 0.3,
+            "preprocess": {
+                "lower_case": false,
+                "remove_punctuation": false
+            }
         }
     },
-    "active_model": "DistilBertBaseFinetuned"
+    "active_model": "DistilBertBaseFinetuned",
+    "active_model2": "deepset/bert-base-german-cased-hatespeech-GermEval18Coarse"
 }

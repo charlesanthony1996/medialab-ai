@@ -26,6 +26,7 @@ RUN pip install --no-cache-dir huggingface_hub
 RUN pip install --no-cache-dir googletrans==4.0.0-rc1
 RUN pip install --no-cache-dir protobuf==3.20
 RUN pip install --no-cache-dir scipy
+RUN pip install --no-cache-dir cachetools
 
 
 # Install any needed dependencies specified in requirements.txt
