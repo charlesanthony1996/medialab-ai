@@ -5,7 +5,24 @@ from langdetect import detect
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import os
+from flask_swagger_ui import get_swaggerui_blueprint
 
+SWAGGER_URL = "/swagger"
+API_URL = "/static/swagger.json"
+
+app = Flask(__name__)
+app.debug = True
+CORS(app, resources={r"/api/*": {"origins": "*"}})
+
+swagger_ui_blueprint = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={
+        'app_name': "Text Processing API"
+    }
+)
+
+app.register_blueprint(swagger_ui_blueprint, url_prefix=SWAGGER_URL)
 
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 

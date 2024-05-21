@@ -1,0 +1,54 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Text Processing API",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/test": {
+            "post": {
+                "description": "Filters and processes text.",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Text to be processed",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "text": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Text processed successfully",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "filtered_text": {
+                                    "type": "string"
+                                },
+                                "negativity_score": {
+                                    "type": "number"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "No text provided"
+                    },
+                    "500": {
+                        "description": "Error during text processing"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,188 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Hate Speech Detection API",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/greeting": {
+            "get": {
+                "description": "Returns a greeting message.",
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Greeting message returned successfully"
+                    }
+                }
+            }
+        },
+        "/api/analyze_hate_speech": {
+            "post": {
+                "description": "Analyzes text for hate speech.",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Text to be analyzed",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "text": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Text analyzed successfully",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "filtered_text": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "No text provided"
+                    },
+                    "500": {
+                        "description": "Error during text analysis"
+                    }
+                }
+            }
+        },
+        "/api/generate_counter_speech": {
+            "post": {
+                "description": "Generates counter speech for the given text.",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Text for counter speech generation",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "text": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Counter speech generated successfully",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "counter_speech_result": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "No text provided"
+                    },
+                    "500": {
+                        "description": "Error during counter speech generation"
+                    }
+                }
+            }
+        },
+        "/api/explain_hate_speech": {
+            "post": {
+                "description": "Explains why a given text is considered hate speech.",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Text to be explained",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "text": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Hate speech explanation generated successfully",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "explanation_result": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "No text provided"
+                    },
+                    "500": {
+                        "description": "Error during explanation generation"
+                    }
+                }
+            }
+        },
+        "/api/fake_response": {
+            "post": {
+                "description": "Generates a fake response.",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "Text for fake response",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "text": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Fake response generated successfully",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "fake_response": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "No text provided"
+                    },
+                    "500": {
+                        "description": "Error during fake response generation"
+                    }
+                }
+            }
+        }
+    }
+}

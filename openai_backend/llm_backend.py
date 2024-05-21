@@ -22,6 +22,7 @@ from langchain_community.vectorstores import Chroma
 from langchain_openai import OpenAIEmbeddings
 from langchain_groq import ChatGroq
 
+from flask_swagger_ui import get_swaggerui_blueprint
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})

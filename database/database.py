@@ -2,11 +2,25 @@ import sqlite3
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from cachetools import cached, LRUCache
+from flask_swagger_ui import get_swaggerui_blueprint
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 cache = LRUCache(maxsize=100)
+
+SWAGGER_URL = "/swagger"
+API_URL = "/static/swagger.json"
+
+swagger_ui_blueprint = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={
+        'app_name': "Flask API with Swagger"
+    }
+)
+
+app.register_blueprint(swagger_ui_blueprint, url_prefix=SWAGGER_URL)
 
 @app.route('/')
 # @cached(cache)

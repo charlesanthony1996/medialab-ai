@@ -1,0 +1,77 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Flask API with Swagger",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/": {
+            "get": {
+                "description": "Returns a message indicating that the service is running.",
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            }
+        },
+        "/api/save_settings": {
+            "post": {
+                "description": "Saves user settings.",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "User settings data",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "userId": {
+                                    "type": "string"
+                                },
+                                "settings": {
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Settings saved successfully"
+                    },
+                    "500": {
+                        "description": "Error saving settings"
+                    }
+                }
+            }
+        },
+        "/api/load_settings": {
+            "get": {
+                "description": "Loads user settings.",
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "query",
+                        "description": "User ID",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Settings loaded successfully"
+                    },
+                    "500": {
+                        "description": "Error loading settings"
+                    }
+                }
+            }
+        }
+    }
+}
