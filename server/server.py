@@ -6,6 +6,7 @@ import os
 import openai
 import requests
 from cachetools import cached, LRUCache
+from flask_swagger_ui import get_swaggerui_blueprint
 
 # Load environment variables
 load_dotenv()
@@ -23,6 +24,19 @@ open_api_key = os.getenv('OPEN_API_KEY')
 client = openai.Client(api_key=open_api_key)
 
 cache = LRUCache(maxsize=100)
+
+SWAGGER_URL = "/swagger"
+API_URL = "/static/swagger.json"
+
+swagger_ui_blueprint = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={
+        'app_name': "Flask API with Swagger"
+    }
+)
+
+app.register_blueprint(swagger_ui_blueprint, url_prefix=SWAGGER_URL)
 
 @app.route('/api/data', methods=['GET'])
 # @cached(cache)

@@ -1,0 +1,208 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Flask API with Swagger",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/data": {
+            "get": {
+                "description": "Returns a simple message.",
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            }
+        },
+        "/api/show_greeting": {
+            "get": {
+                "description": "Fetches a greeting from another service.",
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            }
+        },
+        "/api/comments": {
+            "get": {
+                "description": "Returns a comment.",
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            }
+        },
+        "/extension/default": {
+            "get": {
+                "description": "Returns a default extension prompt.",
+                "produces": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            }
+        },
+        "/api/process_comments": {
+            "post": {
+                "description": "Processes comments and filters text.",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "comment",
+                        "in": "body",
+                        "description": "Comment to be processed",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "comment": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Comment processed successfully"
+                    },
+                    "500": {
+                        "description": "Error during processing comments"
+                    }
+                }
+            }
+        },
+        "/api/filter": {
+            "post": {
+                "description": "Filters text.",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "text",
+                        "in": "body",
+                        "description": "Text to be filtered",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "text": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Text filtered successfully"
+                    },
+                    "500": {
+                        "description": "Error during text filtering"
+                    }
+                }
+            }
+        },
+        "/api/generate_counter_speech": {
+            "post": {
+                "description": "Generates counter speech for the given text.",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "text",
+                        "in": "body",
+                        "description": "Text for counter speech generation",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "text": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Counter speech generated successfully"
+                    },
+                    "500": {
+                        "description": "Error during counter speech generation"
+                    }
+                }
+            }
+        },
+        "/api/explain_hate_speech": {
+            "post": {
+                "description": "Explains the given comment.",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "text",
+                        "in": "body",
+                        "description": "Comment to be explained",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "text": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Comment explained successfully"
+                    },
+                    "500": {
+                        "description": "Error during comment explanation"
+                    }
+                }
+            }
+        },
+        "/api/fake_function": {
+            "post": {
+                "description": "Simulates a fake function response.",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "text",
+                        "in": "body",
+                        "description": "Text for fake function",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "text": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Fake response generated successfully"
+                    },
+                    "500": {
+                        "description": "Error during fake function processing"
+                    }
+                }
+            }
+        }
+    }
+}
